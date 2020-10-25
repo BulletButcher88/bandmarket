@@ -10,7 +10,9 @@ const ProductItem = props => {
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: props.image }} />
       </View>
-      <Text style={styles.title}>{props.title}</Text>
+      <View style={styles.details}>
+        <Text style={styles.title}>{props.title}</Text>
+      </View>
       <View style={styles.actions}>
         <Button title="Details" onPress={props.onDetail} />
         <Button
@@ -33,16 +35,18 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 10,
     backgroundColor: 'white',
-    height: 400,
+    height: 380,
     margin: 10,
   },
   imageContainer: {
+    flex: 1,
+    height: '70%',
     alignItems: 'center',
     justifyContent: 'center'
   },
   image: {
     width: '100%',
-    height: 270
+    height: '100%'
   },
   title: {
     flex: 1,
@@ -53,24 +57,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
 
   },
-  // price: {
-  //   width: '30%',
-  //   borderWidth: 3,
-  //   padding: 3,
-  //   borderColor: 'pink',
-  //   borderRadius: 10,
-  //   marginRight: 20,
-  //   fontSize: 20,
-  //   color: '#888',
-  //   textAlign: 'center'
-  // },
+  details: {
+    width: '100%',
+    height: '20%'
+  },
   actions: {
-    flex: 2,
-    bottom: 30,
+    height: '10%',
     flexDirection: 'row',
     alignSelf: 'auto',
-    justifyContent: 'space-around',
-    top: 20
+    justifyContent: 'center',
   }
 })
 
