@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, Button, StyleSheet } from 'react-native';
 
 const ProductItem = props => {
+
+  const { price } = props.price
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: props.image }} />
       </View>
       <Text style={styles.title}>{props.title}</Text>
-      <Text style={styles.price}>{props.price.toFixed(2)}</Text>
       <View style={styles.actions}>
         <Button title="Details" onPress={props.onDetail} />
-        <Button title="To cart" onPress={props.onAddToCart} />
+        <Button
+          style={{ ...styles.price }}
+          color='pink'
+          title={`BUY $${props.price.toFixed(0)}`}
+          onPress={props.onAddToCart} />
       </View>
-    </View>
+    </View >
   )
 }
 
@@ -28,28 +34,43 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white',
     height: 400,
-    margin: 10
+    margin: 10,
   },
   imageContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center'
   },
   image: {
     width: '100%',
-    height: '78%'
+    height: 270
   },
   title: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     fontSize: 20,
-    marginVertical: 4
+    marginVertical: 4,
+    marginHorizontal: 10,
+
   },
-  price: {
-    fontSize: 10,
-    color: '#888'
-  },
+  // price: {
+  //   width: '30%',
+  //   borderWidth: 3,
+  //   padding: 3,
+  //   borderColor: 'pink',
+  //   borderRadius: 10,
+  //   marginRight: 20,
+  //   fontSize: 20,
+  //   color: '#888',
+  //   textAlign: 'center'
+  // },
   actions: {
+    flex: 2,
+    bottom: 30,
     flexDirection: 'row',
+    alignSelf: 'auto',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    top: 20
   }
 })
 
