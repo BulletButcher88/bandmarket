@@ -37,7 +37,7 @@ const PRODUCTS = [
     'p5',
     'u2',
     'André Popp - Delirium in Hi-Fi',
-    'https://e.snmc.io/i/600/w/66c8f9364956b1deb29e1d3be205f8b0/3670508',
+    'https://farm4.staticflickr.com/3097/2599236332_dece2ecb9d_z.jpg?zz=1',
     'Original title : "Elsa Popping Et Sa Musique Sidérante", released in 1957 by Phonogram S.A., France.',
     15.50
   ),
