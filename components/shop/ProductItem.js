@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, Image, Button, StyleSheet } from 'react-native';
+import { View, Text, Image, Button, StyleSheet, TouchableHighlight } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ProductItem = props => {
 
-  const { price } = props.price
-
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
+
+      <TouchableHighlight
+        activeOpacity={0.6}
+        underlayColor="#DDDDDD"
+        style={styles.imageContainer}
+        onPress={props.onDetail}>
         <Image style={styles.image} source={{ uri: props.image }} />
-      </View>
+      </TouchableHighlight>
+
       <View style={styles.details}>
         <Text style={styles.title}>{props.title}</Text>
       </View>

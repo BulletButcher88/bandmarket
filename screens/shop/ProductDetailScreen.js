@@ -12,23 +12,39 @@ import { useSelector } from 'react-redux';
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId')
-  const products = useSelector(state => state.products.availableProducts)
-  const productDetail = products.filter(product => product.id === productId)
-  const { title, price, description, imageUrl, ownerId } = productDetail[0]
+  const product = useSelector(state =>
+    state.products.availableProducts.find(product =>
+      product.id === productId))
+
+  const { title, price, description, imageUrl, ownerId } = product
+
   return (
-    <View>
-      <View style={styles.containerStyle}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-        <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: imageUrl }} />
-          <View style={styles.priceSticker}>
-            <Text style={styles.price}>${price.toFixed(0)}</Text>
+    <ScrollView>
+      <View>
+        <View style={styles.containerStyle}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
+          <View style={styles.imageContainer}>
+            <Image style={styles.image} source={{ uri: imageUrl }} />
+            <View style={styles.priceSticker}>
+              <Text style={styles.price}>${price.toFixed(0)}</Text>
+            </View>
+          </View>
+          <View style={styles.action}>
+            <Button
+              title='Add to Cart'
+              onPress={() => { }} />
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
+}
+
+ProductDetailScreen.navigationOptions = navData => {
+  return {
+    headerTitle: navData.navigation.getParam('productTitle')
+  }
 }
 
 const styles = StyleSheet.create({
@@ -68,20 +84,24 @@ const styles = StyleSheet.create({
     elevation: 15,
     borderRadius: 15,
     backgroundColor: 'white',
-    height: 480,
+    height: 550,
     margin: 10,
   },
   imageContainer: {
     height: 350,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   image: {
     width: '100%',
     height: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
+  action: {
+    height: 60,
+    justifyContent: 'center'
+  }
 })
 
 export default ProductDetailScreen
