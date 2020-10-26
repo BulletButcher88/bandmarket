@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import SlideProductItem from '../../components/shop/SlideProductItem'
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId')
@@ -32,11 +33,13 @@ const ProductDetailScreen = props => {
           </View>
           <View style={styles.action}>
             <Button
+              color='pink'
               title='Add to Cart'
               onPress={() => { }} />
           </View>
         </View>
       </View>
+      <SlideProductItem productId={productId} />
     </ScrollView>
   )
 }
@@ -70,11 +73,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 6,
     marginHorizontal: 10,
+    height: 50,
+    textAlign: 'center'
   },
   description: {
     fontSize: 15,
     marginVertical: 10,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    height: 60
   },
   containerStyle: {
     shadowColor: 'black',
