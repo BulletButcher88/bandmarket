@@ -77,13 +77,13 @@ const styles = StyleSheet.create({
   },
   priceSticker: {
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    borderColor: 'rgba(255, 168, 168, 0.8)',
     width: 80,
     height: 80,
     borderRadius: 40,
     position: 'absolute',
     right: 10,
     top: 10,
-    borderColor: 'pink',
     borderWidth: 5
   },
 })

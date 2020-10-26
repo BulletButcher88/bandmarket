@@ -41,7 +41,7 @@ const ProductDetailScreen = props => {
       </View>
 
       <View style={styles.moreItemText}>
-        <Text style={styles.moreTextStyle}>Items you also might like...</Text>
+        <Text style={styles.moreTextStyle}>Others you might like...</Text>
       </View>
       <SlideProductItem productId={productId} />
     </ScrollView>
@@ -56,14 +56,14 @@ ProductDetailScreen.navigationOptions = navData => {
 
 const styles = StyleSheet.create({
   priceSticker: {
-    backgroundColor: 'black',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    borderColor: 'rgba(255, 168, 168, 0.8)',
     width: 80,
     height: 80,
     borderRadius: 40,
     position: 'absolute',
     right: 10,
     top: 10,
-    borderColor: 'pink',
     borderWidth: 5
   },
   price: {
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 4 }
   },
   moreTextStyle: {
+    color: 'grey',
     flex: 1,
     fontSize: 18,
     textAlign: 'center',

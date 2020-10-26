@@ -6,7 +6,6 @@ const ProductItem = props => {
 
   return (
     <View style={styles.container}>
-
       <TouchableHighlight
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
@@ -14,7 +13,6 @@ const ProductItem = props => {
         onPress={props.onDetail}>
         <Image style={styles.image} source={{ uri: props.image }} />
       </TouchableHighlight>
-
       <View style={styles.details}>
         <Text style={styles.title}>{props.title}</Text>
       </View>
