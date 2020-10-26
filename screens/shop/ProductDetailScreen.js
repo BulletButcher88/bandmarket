@@ -39,6 +39,10 @@ const ProductDetailScreen = props => {
           </View>
         </View>
       </View>
+
+      <View style={styles.moreItemText}>
+        <Text style={styles.moreTextStyle}>Items you also might like...</Text>
+      </View>
       <SlideProductItem productId={productId} />
     </ScrollView>
   )
@@ -106,6 +110,18 @@ const styles = StyleSheet.create({
   },
   action: {
     height: 60,
+    justifyContent: 'center'
+  },
+  moreItemText: {
+    backgroundColor: 'rgba(52, 52, 52, 0.1)',
+    height: 27,
+    shadowColor: 'black',
+    shadowOffset: { width: 1, height: 4 }
+  },
+  moreTextStyle: {
+    flex: 1,
+    fontSize: 18,
+    textAlign: 'center',
     justifyContent: 'center'
   }
 })
