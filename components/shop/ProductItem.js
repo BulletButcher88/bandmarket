@@ -29,43 +29,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     shadowColor: 'black',
-    shadowOpacity: 0.26,
+    shadowOpacity: 0.30,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
+    elevation: 15,
+    borderRadius: 15,
     backgroundColor: 'white',
     height: 380,
     margin: 10,
   },
   imageContainer: {
     flex: 1,
-    height: '70%',
+    height: '73%',
     alignItems: 'center',
     justifyContent: 'center'
   },
   image: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    overflow: 'hidden'
   },
   title: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     fontSize: 20,
     marginVertical: 4,
     marginHorizontal: 10,
-
   },
   details: {
-    width: '100%',
-    height: '20%'
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '15%'
   },
   actions: {
-    height: '10%',
+    height: '12%',
     flexDirection: 'row',
-    alignSelf: 'auto',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   }
 })
 
