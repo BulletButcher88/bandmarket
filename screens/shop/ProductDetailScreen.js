@@ -8,6 +8,7 @@ import {
   Image
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import SlideProductItem from '../../components/shop/SlideProductItem'
 
@@ -40,9 +41,11 @@ const ProductDetailScreen = props => {
         </View>
       </View>
 
-      <View style={styles.moreItemText}>
+      <LinearGradient
+        colors={['transparent', 'rgba(52, 52, 52, 0.18)', 'transparent']}
+        style={styles.moreItemText}>
         <Text style={styles.moreTextStyle}>Others you might like...</Text>
-      </View>
+      </LinearGradient>
       <SlideProductItem productId={productId} />
     </ScrollView>
   )
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
     top: "30%",
   },
   title: {
+    fontFamily: 'ambit',
     fontSize: 20,
     marginVertical: 6,
     marginHorizontal: 10,
@@ -113,13 +117,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   moreItemText: {
-    backgroundColor: 'rgba(52, 52, 52, 0.1)',
-    height: 27,
+    height: 30,
     shadowColor: 'black',
     shadowOffset: { width: 1, height: 4 }
   },
   moreTextStyle: {
-    color: 'grey',
+    // shadowColor='black',
+    // shadowRadius: 3,
+    // shadowOffset: { width: 1, height: 3 },
+    color: 'white',
     flex: 1,
     fontSize: 18,
     textAlign: 'center',
