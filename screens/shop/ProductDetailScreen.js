@@ -7,7 +7,9 @@ import {
   Button,
   Image
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartAction from '../../store/actions/cart'
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 import SlideProductItem from '../../components/shop/SlideProductItem'
@@ -19,6 +21,8 @@ const ProductDetailScreen = props => {
       product.id === productId))
 
   const { title, price, description, imageUrl, ownerId } = product
+
+  const dispatch = useDispatch()
 
   return (
     <ScrollView>
@@ -36,7 +40,9 @@ const ProductDetailScreen = props => {
             <Button
               color='pink'
               title='Add to Cart'
-              onPress={() => { }} />
+              onPress={() => {
+                dispatch(cartAction.AddToCart(product))
+              }} />
           </View>
         </View>
       </View>
