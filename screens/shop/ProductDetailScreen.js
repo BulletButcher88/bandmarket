@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     top: "30%",
   },
   title: {
-    fontFamily: 'ambit',
+    fontFamily: 'open-san',
     fontSize: 20,
     marginVertical: 6,
     marginHorizontal: 10,

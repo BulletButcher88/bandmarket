@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image, Button, StyleSheet, TouchableHighlight } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -67,6 +66,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   title: {
+    flex: 1,
+    backgroundColor: 'rgba(52, 52, 52, 0.22)',
     shadowColor: 'black',
     shadowOffset: { width: 1, height: 4 },
     shadowOpacity: 6,
@@ -74,9 +75,9 @@ const styles = StyleSheet.create({
     elevation: 15,
     fontFamily: 'ambit',
     fontSize: 22,
-    marginVertical: 4,
-    marginHorizontal: 10,
-    color: 'white'
+    marginVertical: 10,
+    color: 'white',
+    textAlign: 'center',
   },
   details: {
     overflow: 'hidden',
@@ -85,9 +86,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     top: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '18%'
+    height: '22%'
   },
   actions: {
     position: 'absolute',

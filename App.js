@@ -10,7 +10,9 @@ import productsReducer from './store/reducers/product';
 import cartReducer from './store/reducers/cart'
 import ShopNavigator from './navigation/ShopNavigator'
 
+
 // import { composeWithDevTools } from 'redux-devtools-extension'
+// above debugger react native (app), place composeWithDevTools() within createStore as a second argument.
 
 enableScreens()
 
