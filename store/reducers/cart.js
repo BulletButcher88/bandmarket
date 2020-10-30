@@ -39,6 +39,7 @@ export default (state = initialState, action) => {
       const selectedCartItem = state.items[action.pid];
       const currentQuantity = selectedCartItem.quantity
       let updatedCartItems;
+      console.log(action.pid)
 
       if (currentQuantity > 1) {
         const updatedCartItem = new CartItem(

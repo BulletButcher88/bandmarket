@@ -20,7 +20,7 @@ const CartScreen = props => {
         sum: state.cart.items[key].sum
       })
     }
-    return transformedCartItems
+    return transformedCartItems.sort((a, b) => a.productId > b.productId ? 1 : -1)
   })
   const dispatch = useDispatch();
 
@@ -49,6 +49,9 @@ const CartScreen = props => {
                   style={styles.itemTitle}
                   onRemove={() => {
                     dispatch(cartAction.RemoveFromCart(itemData.item.productId))
+                  }}
+                  addItem={() => {
+                    dispatch(cartAction.AddToCart(itemData.item))
                   }}
                 />
               )
