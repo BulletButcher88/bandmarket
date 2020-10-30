@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartAction from '../../store/actions/cart'
+
+import CartItem from '../../components/shop/CartItem'
 
 
 const CartScreen = props => {
+
   const cartAmount = useSelector(state => state.cart.totalAmount)
   const cartItems = useSelector(state => {
     const transformedCartItems = [];
@@ -18,6 +22,7 @@ const CartScreen = props => {
     }
     return transformedCartItems
   })
+  const dispatch = useDispatch();
 
 
   return (
@@ -25,7 +30,7 @@ const CartScreen = props => {
       <View style={styles.screen}>
         <Text style={styles.summary}>
           <Text style={styles.textSummary}>
-            Total: <Text style={styles.amount}>${cartAmount.toFixed()}</Text>
+            Total: <Text style={styles.amount}>${cartAmount.toFixed(2)}</Text>
           </Text>
         </Text>
         <Button title='Pay Now' disabled={cartItems.length === 0} />
@@ -34,12 +39,18 @@ const CartScreen = props => {
         <Text style={styles.summary}>
           <FlatList
             data={cartItems}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.productId}
             renderItem={itemData => {
-              console.log(itemData.item)
-              const { productTitle } = itemData.item
               return (
-                <Text style={styles.itemTitle}>{console.log(productTitle)} empty?</Text>
+                <CartItem
+                  productTitle={itemData.item.productTitle}
+                  quantity={itemData.item.quantity}
+                  sum={itemData.item.sum}
+                  style={styles.itemTitle}
+                  onRemove={() => {
+                    dispatch(cartAction.RemoveFromCart(itemData.item.productId))
+                  }}
+                />
               )
             }}
           />
