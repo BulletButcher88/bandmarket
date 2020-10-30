@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
-import * as cartAction from '../../store/actions/cart'
-import CartItem from '../../components/shop/CartItem'
+import * as cartAction from '../../store/actions/cart';
+import * as ordersAction from '../../store/actions/orders';
+import CartItem from '../../components/shop/CartItem';
 
 
 const CartScreen = props => {
@@ -30,12 +31,16 @@ const CartScreen = props => {
         <Text style={styles.summary}>
           <Text style={styles.textSummary}>
             {cartAmount > 0 ?
-              <Text style={styles.amount}>Total: ${cartAmount.toFixed(2)}</Text> :
+              <Text>Total: $ <Text style={styles.amount}>{cartAmount.toFixed(2)}</Text></Text> :
               <Text style={styles.emptyText}>Cart is empty...</Text>
             }
           </Text>
         </Text>
-        <Button title='Pay Now' disabled={cartItems.length === 0} />
+        <Button
+          title='Pay Now' disabled={cartItems.length === 0}
+          onPress={() => {
+            dispatch(ordersAction.AddOrder(cartItems, cartAmount))
+          }} />
       </View>
       {cartItems.length === 0 ? null : <View style={styles.screen}>
         <Text style={styles.summary}>
@@ -65,6 +70,9 @@ const CartScreen = props => {
   )
 };
 
+CartScreen.navigationOptions = {
+  headerTitle: 'Your Oder'
+}
 
 const styles = StyleSheet.create({
   screen: {
@@ -93,7 +101,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontWeight: 'bold',
-    color: '#ffed21'
+    color: '#1cd100'
   },
   itemTitle: {
     flex: 1,

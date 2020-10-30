@@ -7,8 +7,9 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 
 import productsReducer from './store/reducers/product';
-import cartReducer from './store/reducers/cart'
-import ShopNavigator from './navigation/ShopNavigator'
+import cartReducer from './store/reducers/cart';
+import ordersReducer from './store/reducers/orders';
+import ShopNavigator from './navigation/ShopNavigator';
 
 
 // import { composeWithDevTools } from 'redux-devtools-extension'
@@ -18,7 +19,8 @@ enableScreens()
 
 const rootReducer = combineReducers({
   products: productsReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  orders: ordersReducer
 });
 
 const store = createStore(rootReducer);
