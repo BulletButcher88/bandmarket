@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartAction from '../../store/actions/cart'
-
 import CartItem from '../../components/shop/CartItem'
 
 
@@ -30,7 +29,10 @@ const CartScreen = props => {
       <View style={styles.screen}>
         <Text style={styles.summary}>
           <Text style={styles.textSummary}>
-            Total: <Text style={styles.amount}>${cartAmount.toFixed(2)}</Text>
+            {cartAmount > 0 ?
+              <Text style={styles.amount}>Total: ${cartAmount.toFixed(2)}</Text> :
+              <Text style={styles.emptyText}>Cart is empty...</Text>
+            }
           </Text>
         </Text>
         <Button title='Pay Now' disabled={cartItems.length === 0} />
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   },
   textSummary: {
     fontSize: 20,
-    color: 'black'
+    color: 'black',
   },
   amount: {
     fontWeight: 'bold',
@@ -98,6 +100,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: 'white',
     height: 20
+  },
+  emptyText: {
+    color: 'red',
+    opacity: .4
   }
 })
 
