@@ -51,7 +51,7 @@ const CartScreen = props => {
                     dispatch(cartAction.RemoveFromCart(itemData.item.productId))
                   }}
                   addItem={() => {
-                    dispatch(cartAction.AddToCart(itemData.item))
+                    dispatch(cartAction.PlusOneToCart(itemData.item))
                   }}
                 />
               )
