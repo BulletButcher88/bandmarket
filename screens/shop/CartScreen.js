@@ -39,7 +39,7 @@ const CartScreen = props => {
         <Button
           title='Pay Now' disabled={cartItems.length === 0}
           onPress={() => {
-            dispatch(ordersAction.AddOrder(cartItems, cartAmount))
+            dispatch(ordersAction.addOrder(cartItems, cartAmount))
           }} />
       </View>
       {cartItems.length === 0 ? null : <View style={styles.screen}>

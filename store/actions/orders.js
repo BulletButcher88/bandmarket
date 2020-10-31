@@ -1,6 +1,6 @@
-const ADD_ORDER = 'ADD_ORDER'
+export const ADD_ORDER = 'ADD_ORDER'
 
-export const AddOrder = (cartItems, totalAmount) => {
+export const addOrder = (cartItems, totalAmount) => {
   return {
     type: ADD_ORDER,
     orderData: {
@@ -9,3 +9,4 @@ export const AddOrder = (cartItems, totalAmount) => {
     }
   }
 }
+
