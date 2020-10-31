@@ -13,12 +13,12 @@ const OrderScreen = props => {
 }
 OrderScreen.navigationOptions = navData => {
   return {
-    headerTitle: 'Your Oder',
+    headerTitle: 'Your Order',
     headerLeft: (() =>
       <HeaderButtons
         HeaderButtonComponent={CustomHeaderButton}>
         <Item
-          title='Cart'
+          title='Menu'
           iconName='ios-menu'
           onPress={() => {
             navData.navigation.toggleDrawer()

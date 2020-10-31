@@ -3,7 +3,6 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 export const PLUS_ONE_ITEM = 'PLUS_ONE_ITEM'
 
 export const AddToCart = product => {
-  console.log(product)
   return { type: ADD_TO_CART, product: product }
 }
 
