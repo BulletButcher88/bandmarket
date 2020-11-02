@@ -7,9 +7,8 @@ import OderItem from '../../components/shop/OrderItem'
 
 const OrderScreen = props => {
   const orders = useSelector(state => state.orders.orders)
-  return <FlatList data={orders} keyExtractor={item => item.id} renderItem={(itemData, index) =>
+  return <FlatList data={orders} keyExtractor={(item, index) => index} renderItem={(itemData, index) =>
     <OderItem
-      key={index}
       items={itemData.item.items}
       totalAmount={itemData.item.totalAmount}
       date={itemData.item.readableDate} />

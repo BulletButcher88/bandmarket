@@ -9,19 +9,20 @@ import ProductOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrderScreen from '../screens/shop/OrderScreen';
+import UserProductsScreen from '../screens/user/UserProductScreen'
 // import Colors from ''
 
 const defaultOptions = {
   headerStyle: {
-    backgroundColor: "pink"
+    backgroundColor: "white"
   },
   headerTitleStyle: {
     fontFamily: 'ambit'
   },
   headerBackTitle: '',
   headerBackTitleStyle: {
-    fontFamily: 'open-san',
-    fontSize: 11,
+    fontFamily: 'montserrat',
+    fontSize: 12,
     color: 'black'
   }
 }
@@ -51,6 +52,23 @@ const ProductsNavigator = createStackNavigator(
     defaultNavigationOptions: defaultOptions
   })
 
+const AdminNavigator = createStackNavigator({
+  UserProducts: { screen: UserProductsScreen }
+},
+  {
+    navigationOptions: {
+      drawerIcon: drawerConfig => (
+        <Ionicons
+          name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      )
+    },
+    defaultNavigationOptions: defaultOptions
+  }
+);
+
 const OrderNavigator = createStackNavigator({
   Orders: { screen: OrderScreen }
 },
@@ -70,10 +88,11 @@ const OrderNavigator = createStackNavigator({
 
 const ShopNavigator = createDrawerNavigator({
   Products: ProductsNavigator,
-  Orders: OrderNavigator
+  Orders: OrderNavigator,
+  Admin: AdminNavigator
 }, {
   contentOptions: {
-    activeTintColor: 'pink'
+    activeTintColor: 'white'
   }
 })
 

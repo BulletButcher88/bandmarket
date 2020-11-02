@@ -15,7 +15,6 @@ const OderItem = props => {
               <Text style={{ flex: 0.25 }}>${item.sum.toFixed(2)}</Text>
             </View>
           ) : null
-
         }
         <Text style={styles.totalCost}><Text>TOTAL{'  '}</Text>${props.totalAmount.toFixed(2)}</Text>
         <Button
