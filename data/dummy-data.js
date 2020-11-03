@@ -48,6 +48,14 @@ const PRODUCTS = [
     'https://thumbs-prod.si-cdn.com/Mb2XnZ0QPtNdy1DGCOZ2VYPohq4=/fit-in/1600x0/https://public-media.si-cdn.com/filer/e7/ca/e7ca2a4e-50f0-4e8c-a405-850dc5910981/golden_record.jpg',
     'The Voyager Golden Records are two phonograph records that were included aboard both Voyager spacecrafts launched in 1977.',
     350.01
+  ),
+  new Product(
+    'p7',
+    'u1',
+    'Melvins - Limited Edition T-shirt',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTaTNf9MUKqLf7z2CsQfNIM60rnoEBbp44IpQ&usqp=CAU',
+    'MELVINS LUCIUS AND MOUNTAINS NEW BLACK T-SHIRT',
+    33.50
   )
 ];
 

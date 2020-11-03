@@ -1,13 +1,11 @@
 import React from 'react';
-import { View, Text, Image, Button, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
 const ProductItem = props => {
-
   return (
     <View style={styles.container}>
-
       <TouchableHighlight
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
@@ -16,15 +14,12 @@ const ProductItem = props => {
         <Image style={styles.image} source={{ uri: props.image }} />
       </TouchableHighlight>
       <LinearGradient
-        colors={['rgba(52, 52, 52, 0.7)', 'transparent']}
-        style={styles.actions}>
-        <View style={styles.children}>
+        colors={['transparent', 'black']}
+        style={styles.gradient}
+      >
+        <View style={styles.buttons}>
           {props.children}
         </View>
-      </LinearGradient>
-      <LinearGradient
-        colors={['transparent', 'black']}
-        style={styles.details} >
         <Text style={styles.title}>{props.title}</Text>
       </LinearGradient>
     </View>
@@ -53,37 +48,33 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   title: {
-    shadowColor: 'black',
+    shadowColor: 'grey',
     shadowOffset: { width: 1, height: 4 },
     shadowOpacity: 6,
     shadowRadius: 2,
     elevation: 8,
-    fontFamily: 'ambit',
+    fontFamily: 'montserrat-bold',
     fontSize: 17,
     margin: 15,
     color: 'white',
+    width: '65%',
+
   },
-  details: {
-    overflow: 'hidden',
-    width: '100%',
+  gradient: {
     position: 'absolute',
     bottom: 0,
-    height: '23%',
-  },
-  actions: {
-    position: 'absolute',
-    top: 0,
     width: '100%',
-    height: '15%',
+    height: '30%',
   },
-  children: {
+  buttons: {
     position: 'absolute',
     right: 0,
-    width: '38%',
+    width: '20%',
     height: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+    paddingBottom: 20
   }
 })
 
