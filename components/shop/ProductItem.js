@@ -18,11 +18,9 @@ const ProductItem = props => {
         colors={['transparent', 'black']}
         style={styles.gradient}
       >
-
         <View style={styles.buttons}>
           {props.children}
         </View>
-
         <Text style={styles.title}>{props.title}</Text>
       </LinearGradient>
     </View>
@@ -41,10 +39,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 270,
     margin: 10,
+    backgroundColor: 'black',
   },
   imageContainer: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    height: '74%',
+
   },
   image: {
     width: '100%',
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 8,
     fontFamily: 'montserrat-bold',
-    fontSize: 17,
+    fontSize: 12,
     margin: 15,
     color: 'white',
     width: '65%',
@@ -72,12 +73,12 @@ const styles = StyleSheet.create({
   buttons: {
     position: 'absolute',
     right: 0,
-    width: '20%',
+    width: '30%',
     height: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
     alignItems: 'flex-end',
-    paddingBottom: 20
+    padding: 10
   }
 })
 

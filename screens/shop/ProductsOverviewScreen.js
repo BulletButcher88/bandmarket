@@ -22,6 +22,7 @@ const ProductOverviewScreen = props => {
     <View style={styles.container}>
       <FlatList
         data={products}
+        numColumns={2}
         keyExtractor={item => item.id}
         renderItem={itemData =>
           <ProductItem
@@ -34,16 +35,16 @@ const ProductOverviewScreen = props => {
           >
             <Ionicons
               name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-              size={23}
-              color="#e3e3e3"
+              size={20}
+              color="grey"
               onPress={() => {
                 selectItemHandler(itemData.item.id, itemData.item.title)
               }}
             />
             <Ionicons
               name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-              size={23}
-              color="#ebcccc"
+              size={20}
+              color="grey"
               onPress={() => {
                 dispatch(cartAction.AddToCart(itemData.item))
               }}
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: 'black',
     paddingTop: 15
   },
