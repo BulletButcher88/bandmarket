@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartAction from '../../store/actions/cart'
-
 import { LinearGradient } from 'expo-linear-gradient';
-
 import SlideProductItem from '../../components/shop/SlideProductItem'
+
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId')
@@ -58,8 +59,23 @@ const ProductDetailScreen = props => {
 }
 
 ProductDetailScreen.navigationOptions = navData => {
+  const alert = navData.navigation.getParam('badge')
   return {
-    headerTitle: navData.navigation.getParam('productTitle')
+    headerTitle: navData.navigation.getParam('productTitle'),
+    headerRight: (() =>
+      <HeaderButtons
+        HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Cart'
+          iconName='ios-cart'
+          onPress={() => {
+            navData.navigation.navigate('Cart')
+          }} />
+        {alert ?
+          <View style={styles.notification}>
+          </View> : null}
+      </HeaderButtons>
+    )
   }
 }
 
@@ -128,14 +144,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 4 }
   },
   moreTextStyle: {
-    // shadowColor='black',
-    // shadowRadius: 3,
-    // shadowOffset: { width: 1, height: 3 },
     color: 'white',
     flex: 1,
     fontSize: 18,
     textAlign: 'center',
     justifyContent: 'center'
+  },
+  notification: {
+    height: 12,
+    width: 12,
+    backgroundColor: 'red',
+    position: 'absolute',
+    right: 4,
+    borderRadius: 10
   }
 })
 

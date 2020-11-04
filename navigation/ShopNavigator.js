@@ -18,11 +18,11 @@ const defaultOptions = {
     backgroundColor: "white"
   },
   headerTitleStyle: {
-    fontFamily: 'ambit'
+    fontFamily: 'rufina'
   },
   headerBackTitle: '',
   headerBackTitleStyle: {
-    fontFamily: 'montserrat',
+    fontFamily: 'rufina',
     fontSize: 12,
     color: 'black'
   }

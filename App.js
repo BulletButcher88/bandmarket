@@ -28,6 +28,8 @@ const store = createStore(rootReducer);
 
 const fetchFonts = () => {
   return Font.loadAsync({
+    'rufina': require('./assets/fonts/Rufina-Regular.ttf'),
+    'rufina-bold': require('./assets/fonts/Rufina-Bold.ttf'),
     'open-san': require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-san-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
     'ambit-bold': require('./assets/fonts/Ambit-Bold.ttf'),

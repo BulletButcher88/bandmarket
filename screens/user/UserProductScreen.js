@@ -19,6 +19,7 @@ const UserProductsScreen = props => {
       <Text style={styles.text}>Edit / Delete</Text>
       <FlatList
         data={userProducts}
+        numColumns={2}
         keyExtractor={item => item.id}
         renderItem={(itemData) =>
           <ProductItem

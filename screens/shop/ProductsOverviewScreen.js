@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -11,13 +11,20 @@ import { Ionicons } from '@expo/vector-icons';
 const ProductOverviewScreen = props => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products.availableProducts)
+  const badgeNum = useSelector(state => state.cart.items)
+  const alert = Object.keys(badgeNum).length
 
-  const selectItemHandler = (id, title) => {
+  const selectItemHandler = (id, title, alert) => {
     props.navigation.navigate('ProductDetail', {
       productId: id,
-      productTitle: title
+      productTitle: title,
+      badge: alert ? alert + 1 : null
     })
   }
+  const badgeAlert = (alert) => {
+    props.navigation.setParams({ badge: alert + 1 })
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -31,7 +38,7 @@ const ProductOverviewScreen = props => {
             price={itemData.item.price}
             image={itemData.item.imageUrl}
             onSelect={() => {
-              selectItemHandler(itemData.item.id, itemData.item.title)
+              selectItemHandler(itemData.item.id, itemData.item.title, alert);
             }}
           >
             <Ionicons
@@ -47,7 +54,8 @@ const ProductOverviewScreen = props => {
               size={20}
               color="grey"
               onPress={() => {
-                dispatch(cartAction.AddToCart(itemData.item))
+                dispatch(cartAction.AddToCart(itemData.item));
+                badgeAlert(alert)
               }}
             />
           </ProductItem>
@@ -57,6 +65,7 @@ const ProductOverviewScreen = props => {
 }
 
 ProductOverviewScreen.navigationOptions = navData => {
+  const alert = navData.navigation.getParam('badge')
   return {
     headerTitle: 'Products',
     headerLeft: (() =>
@@ -79,6 +88,9 @@ ProductOverviewScreen.navigationOptions = navData => {
           onPress={() => {
             navData.navigation.navigate('Cart')
           }} />
+        {alert ?
+          <View style={styles.notification}>
+          </View> : null}
       </HeaderButtons>
     )
   }
@@ -93,7 +105,14 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'black',
   },
-
+  notification: {
+    height: 12,
+    width: 12,
+    backgroundColor: 'red',
+    position: 'absolute',
+    right: 4,
+    borderRadius: 10
+  }
 })
 
 export default ProductOverviewScreen;
