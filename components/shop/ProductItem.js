@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 const ProductItem = props => {
-  console.log(props.image)
   return (
     <View style={styles.container}>
       <TouchableHighlight
