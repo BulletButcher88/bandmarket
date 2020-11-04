@@ -15,13 +15,11 @@ const UserProductsScreen = props => {
       <FlatList
         data={userProducts}
         keyExtractor={item => item.id}
-        renderItem={itemData =>
+        renderItem={(itemData) =>
           <ProductItem
             image={itemData.item.imageUrl}
             title={itemData.item.title}
             price={itemData.item.price}
-            onDetail={() => { }}
-            onAddToCart={() => { }}
           >
             <Ionicons
               name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
