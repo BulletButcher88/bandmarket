@@ -1,14 +1,19 @@
 import React from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
 import ProductItem from '../../components/shop/ProductItem';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import { Ionicons } from '@expo/vector-icons';
-
+import * as productAction from '../../store/actions/product'
 
 const UserProductsScreen = props => {
   const userProducts = useSelector(state => state.products.userProducts)
+  const dispatch = useDispatch()
+
+  const editProductHandler = id => {
+    props.navigation.navigate('EditProducts', { productId: id })
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Edit / Delete</Text>
@@ -20,13 +25,16 @@ const UserProductsScreen = props => {
             image={itemData.item.imageUrl}
             title={itemData.item.title}
             price={itemData.item.price}
+            onSelect={() => {
+              editProductHandler(itemData.item.id)
+            }}
           >
             <Ionicons
               name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
               size={23}
               color="#75cefa"
               onPress={() => {
-                selectItemHandler(itemData.item.id, itemData.item.title)
+                editProductHandler(itemData.item.id)
               }}
             />
             <Ionicons
@@ -34,7 +42,7 @@ const UserProductsScreen = props => {
               size={23}
               color="red"
               onPress={() => {
-                dispatch(cartAction.AddToCart(itemData.item))
+                dispatch(productAction.deleteProduct(itemData.item.id))
               }}
             /></ProductItem>
         } />
@@ -70,6 +78,17 @@ UserProductsScreen.navigationOptions = navData => {
           iconName='ios-menu'
           onPress={() => {
             navData.navigation.toggleDrawer()
+          }} />
+      </HeaderButtons>
+    ),
+    headerRight: (() =>
+      <HeaderButtons
+        HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Add'
+          iconName='ios-add'
+          onPress={() => {
+            navData.navigation.navigate('EditProducts')
           }} />
       </HeaderButtons>
     ),
