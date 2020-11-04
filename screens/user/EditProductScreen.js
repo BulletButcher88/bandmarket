@@ -58,7 +58,9 @@ const EditProductScreen = props => {
 const styles = StyleSheet.create({
   previewContainer: {
     height: 300,
-    backgroundColor: 'grey'
+    backgroundColor: 'grey',
+    padding: 8,
+    width: '50%'
   },
   previewText: {
     padding: 10,

@@ -94,7 +94,7 @@ const ShopNavigator = createDrawerNavigator({
   Admin: AdminNavigator
 }, {
   contentOptions: {
-    activeTintColor: 'white'
+    activeTintColor: 'pink'
   }
 })
 

@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 15,
     backgroundColor: 'white',
-    height: 270,
-    margin: 10,
+    height: 280,
+    margin: 4,
     backgroundColor: 'black',
   },
   imageContainer: {

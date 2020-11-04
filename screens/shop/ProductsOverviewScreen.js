@@ -21,6 +21,7 @@ const ProductOverviewScreen = props => {
   return (
     <View style={styles.container}>
       <FlatList
+        style={{ marginVertical: 8 }}
         data={products}
         numColumns={2}
         keyExtractor={item => item.id}
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: 'black',
-    paddingTop: 15
   },
 
 })
