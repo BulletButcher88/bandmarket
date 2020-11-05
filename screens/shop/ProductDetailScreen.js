@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -25,6 +25,9 @@ const ProductDetailScreen = props => {
   const badgeAlert = (numCartItems) => {
     props.navigation.setParams({ badge: numCartItems + 1 })
   }
+
+
+
   const dispatch = useDispatch()
 
   const { title, price, description, imageUrl, ownerId } = product

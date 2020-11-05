@@ -26,7 +26,7 @@ const ProductOverviewScreen = props => {
 
   useEffect(() => {
     badgeAlert(numCartItems)
-  }, [])
+  }, [numCartItems])
 
 
   return (
