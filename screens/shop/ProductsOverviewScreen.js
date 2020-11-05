@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
@@ -11,19 +11,23 @@ import { Ionicons } from '@expo/vector-icons';
 const ProductOverviewScreen = props => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products.availableProducts)
-  const badgeNum = useSelector(state => state.cart.items)
-  const alert = Object.keys(badgeNum).length
+  const numCartItems = useSelector(state => state.cart.numberOfItems)
 
-  const selectItemHandler = (id, title, alert) => {
+  const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
       productId: id,
       productTitle: title,
-      badge: alert ? alert + 1 : null
+      badge: numCartItems && numCartItems > 0 ? numCartItems : null
     })
   }
-  const badgeAlert = (alert) => {
-    props.navigation.setParams({ badge: alert + 1 })
+  const badgeAlert = (numCartItems) => {
+    props.navigation.setParams({ badge: numCartItems })
   }
+
+  useEffect(() => {
+    badgeAlert(numCartItems)
+  }, [])
+
 
   return (
     <View style={styles.container}>
@@ -38,7 +42,7 @@ const ProductOverviewScreen = props => {
             price={itemData.item.price}
             image={itemData.item.imageUrl}
             onSelect={() => {
-              selectItemHandler(itemData.item.id, itemData.item.title, alert);
+              selectItemHandler(itemData.item.id, itemData.item.title, numCartItems);
             }}
           >
             <Ionicons
@@ -55,7 +59,7 @@ const ProductOverviewScreen = props => {
               color="grey"
               onPress={() => {
                 dispatch(cartAction.AddToCart(itemData.item));
-                badgeAlert(alert)
+                badgeAlert(numCartItems + 1)
               }}
             />
           </ProductItem>
@@ -65,7 +69,8 @@ const ProductOverviewScreen = props => {
 }
 
 ProductOverviewScreen.navigationOptions = navData => {
-  const alert = navData.navigation.getParam('badge')
+  const alertData = navData.navigation.getParam('badge')
+  const alert = alertData ? alertData : null
   return {
     headerTitle: 'Products',
     headerLeft: (() =>

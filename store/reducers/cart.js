@@ -5,7 +5,8 @@ import { DELETE_PRODUCT } from '../actions/product'
 
 const initialState = {
   items: {},
-  totalAmount: 0
+  totalAmount: 0,
+  numberOfItems: 0
 }
 
 export default (state = initialState, action) => {
@@ -27,14 +28,16 @@ export default (state = initialState, action) => {
         return {
           ...state,
           items: { ...state.items, [addedProduct.id]: updateNewCartItem },
-          totalAmount: state.totalAmount + prodPrice
+          totalAmount: state.totalAmount + prodPrice,
+          numberOfItems: state.numberOfItems + 1
         }
       } else {
         updateNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice)
         return {
           ...state,
           items: { ...state.items, [addedProduct.id]: updateNewCartItem },
-          totalAmount: state.totalAmount + prodPrice
+          totalAmount: state.totalAmount + prodPrice,
+          numberOfItems: state.numberOfItems + 1
         }
       }
     case REMOVE_FROM_CART:
@@ -57,7 +60,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         items: updatedCartItems,
-        totalAmount: state.totalAmount - selectedCartItem.productPrice
+        totalAmount: state.totalAmount - selectedCartItem.productPrice,
+        numberOfItems: state.numberOfItems - 1
       }
     case PLUS_ONE_ITEM:
       const cartItem = state.items[action.pid.productId];
@@ -72,7 +76,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         items: updatedCart,
-        totalAmount: state.totalAmount + cartItem.productPrice
+        totalAmount: state.totalAmount + cartItem.productPrice,
+        numberOfItems: state.numberOfItems + 1
       };
     case ADD_ORDER:
       return initialState;
@@ -86,7 +91,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         items: updatedItems,
-        totalAmount: state.totalAmount - itemTotal
+        totalAmount: state.totalAmount - itemTotal,
+        numberOfItems: state.numberOfItems - state.items[action.pid].quantity
       }
   }
   return state;

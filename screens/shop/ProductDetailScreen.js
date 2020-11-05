@@ -21,9 +21,13 @@ const ProductDetailScreen = props => {
     state.products.availableProducts.find(product =>
       product.id === productId))
 
-  const { title, price, description, imageUrl, ownerId } = product
-
+  const numCartItems = useSelector(state => state.cart.numberOfItems)
+  const badgeAlert = (numCartItems) => {
+    props.navigation.setParams({ badge: numCartItems + 1 })
+  }
   const dispatch = useDispatch()
+
+  const { title, price, description, imageUrl, ownerId } = product
 
   return (
     <ScrollView>
@@ -42,7 +46,8 @@ const ProductDetailScreen = props => {
               color='pink'
               title='Add to Cart'
               onPress={() => {
-                dispatch(cartAction.AddToCart(product))
+                dispatch(cartAction.AddToCart(product));
+                badgeAlert(numCartItems);
               }} />
           </View>
         </View>
