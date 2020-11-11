@@ -16,7 +16,7 @@ const OderItem = props => {
             </View>
           ) : null
         }
-        <Text style={styles.totalCost}><Text>TOTAL{'  '}</Text>${props.totalAmount.toFixed(2)}</Text>
+        <Text style={styles.totalCost}><Text>TOTAL{'  '}</Text>${Math.round(props.totalAmount.toFixed(2) * 100) / 100}</Text>
         <Button
           title={!showDetails ? 'Details' : 'Hide'}
           onPress={() => {

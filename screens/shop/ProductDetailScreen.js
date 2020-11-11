@@ -16,18 +16,20 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 const ProductDetailScreen = props => {
+
   const productId = props.navigation.getParam('productId')
   const product = useSelector(state =>
     state.products.availableProducts.find(product =>
       product.id === productId))
 
+
+  // useEffect(() => {
+  // }, [badgeAlert])
   const numCartItems = useSelector(state => state.cart.numberOfItems)
-  const badgeAlert = (numCartItems) => {
+
+  const badgeAlert = () => {
     props.navigation.setParams({ badge: numCartItems + 1 })
   }
-
-
-
   const dispatch = useDispatch()
 
   const { title, price, description, imageUrl, ownerId } = product
