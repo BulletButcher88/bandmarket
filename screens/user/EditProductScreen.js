@@ -31,6 +31,7 @@ const EditProductScreen = props => {
         productAction.createProduct(title, description, imageUrl, +price)
       );
     }
+    props.navigation.goBack()
   }, [dispatch, proId, title, description, imageUrl, price])
 
 
@@ -40,25 +41,43 @@ const EditProductScreen = props => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
+      {product ? <Text style={{ padding: 10, color: 'white', backgroundColor: "#333333" }}>product ID {product ? product.id : null}</Text> : null}
 
       {product ?
-        <View style={styles.previewContainer}>
-          <Text style={styles.previewText}>preview</Text>
-          <ProductItem
-            image={product.imageUrl}
-            title={product.title}
-            price={product.price} >
-            <Ionicons
-              name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-              size={23}
-              color="grey"
-            />
-            <Ionicons
-              name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-              size={23}
-              color="grey"
-            />
-          </ProductItem>
+        <View style={styles.previewTopBox}>
+          <View style={styles.previewContainer}>
+            <ProductItem
+              image={product.imageUrl}
+              title={product.title}
+              price={product.price} >
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
+                size={23}
+                color="grey"
+              />
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                size={23}
+                color="grey"
+              />
+            </ProductItem>
+          </View>
+          <View style={styles.emptySpaceBox}>
+            <Text style={styles.previewText}>OTHER PRODUCT</Text>
+            <View style={styles.emptySpaceIcons}>
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
+                size={23}
+                color="grey"
+                style={{ paddingBottom: 3 }}
+              />
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                size={23}
+                color="grey"
+              />
+            </View>
+          </View>
         </View>
         : null}
 
@@ -116,21 +135,43 @@ EditProductScreen.navigationOptions = navData => {
 }
 
 const styles = StyleSheet.create({
-  previewContainer: {
+  previewTopBox: {
+    width: '100%',
     height: 300,
-    backgroundColor: 'grey',
-    padding: 8,
-    width: '50%'
+    flexDirection: 'row',
+    backgroundColor: '#333333',
+    justifyContent: 'space-around',
+    alignContent: 'center'
+
+  },
+  previewContainer: {
+    flex: 2,
+    height: '100%',
+    backgroundColor: '#333333',
+    padding: 5,
+  },
+  emptySpaceBox: {
+    opacity: 0.3,
+    flex: 2,
+    backgroundColor: 'black',
+    margin: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   previewText: {
+    color: 'grey',
     padding: 10,
-    color: 'white'
+  },
+  emptySpaceIcons: {
+    position: 'absolute',
+    bottom: 20,
+    right: 12
   },
   inputStyle: {
     fontSize: 18,
     margin: 5,
     backgroundColor: 'white',
-    padding: 5,
+    padding: 10,
     height: 60,
     borderColor: 'grey',
     borderBottomWidth: 1
