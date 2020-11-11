@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import Card from '../UI/Card'
 
 const ProductItem = props => {
   return (
-    <View style={styles.container}>
+    <Card style={styles.container}>
       <TouchableHighlight
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
@@ -22,20 +22,13 @@ const ProductItem = props => {
         </View>
         <Text style={styles.title}>{props.title}</Text>
       </LinearGradient>
-    </View>
+    </Card>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden',
-    shadowColor: 'black',
-    shadowOpacity: 0.20,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 15,
-    backgroundColor: 'white',
     height: 280,
     margin: 4,
     backgroundColor: 'black',

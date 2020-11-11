@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as cartAction from '../../store/actions/cart';
 import * as ordersAction from '../../store/actions/orders';
 import CartItem from '../../components/shop/CartItem';
-
+import Card from '../../components/UI/Card';
 
 const CartScreen = props => {
 
@@ -28,14 +28,14 @@ const CartScreen = props => {
   return (
     <View>
       <View style={styles.screen}>
-        <Text style={styles.summary}>
+        <Card style={styles.summary}>
           <Text style={styles.textSummary}>
             {cartAmount > 0 ?
               <Text>Total: $ <Text style={styles.amount}>{cartAmount.toFixed(2)}</Text></Text> :
               <Text style={styles.emptyText}>Cart is empty...</Text>
             }
           </Text>
-        </Text>
+        </Card>
         <Button
           title='Pay Now' disabled={cartItems.length === 0}
           onPress={() => {
@@ -43,7 +43,7 @@ const CartScreen = props => {
           }} />
       </View>
       {cartItems.length === 0 ? null : <View style={styles.screen}>
-        <Text style={styles.summary}>
+        <Card style={styles.summary}>
           <FlatList
             data={cartItems}
             keyExtractor={item => item.productId}
@@ -64,7 +64,7 @@ const CartScreen = props => {
               )
             }}
           />
-        </Text>
+        </Card>
       </View>}
     </View>
   )
@@ -84,14 +84,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
     padding: 10,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    overflow: 'hidden',
-    shadowColor: 'black',
-    shadowOpacity: 0.30,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 15,
     borderRadius: 15,
     backgroundColor: 'white',
   },

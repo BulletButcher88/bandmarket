@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
+import Card from '../UI/Card';
+
 const OderItem = props => {
   const [showDetails, setShowDetails] = useState(false)
   return (
-    <View style={styles.screen}>
+    <Card style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.date}>{props.date}</Text>
         {showDetails ?
@@ -25,18 +27,13 @@ const OderItem = props => {
           color='pink'
         />
       </View>
-    </View>
+    </Card>
   )
 }
 
 const styles = StyleSheet.create({
   screen: {
     margin: 20,
-    shadowColor: 'black',
-    shadowOpacity: 0.30,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 15,
   },
   summary: {
     justifyContent: 'space-between',
