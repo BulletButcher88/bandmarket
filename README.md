@@ -1,4 +1,4 @@
-# Record Market Place Template.
+# Market Place Template
 ## made w/ react native expo
 
 Shop for rare records and get notifications to your cart. IOS and android compatible.

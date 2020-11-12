@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
@@ -20,8 +20,15 @@ const EditProductScreen = props => {
   const [description, setDescription] = useState(product ? product.description : '')
   const [imageUrl, setImageUrl] = useState(product ? product.imageUrl : '')
   const [price, setPrice] = useState('')
+  const [titleIsValid, setTitleIsValid] = useState(true)
 
   const onSubmitHandler = useCallback(() => {
+    if (!titleIsValid) {
+      Alert.alert('Wrong input', "Please check errors in the form", [{
+        text: 'OK'
+      }])
+      return;
+    }
     if (product) {
       dispatch(
         productAction.updateProduct(proId, title, description, imageUrl)
@@ -38,6 +45,15 @@ const EditProductScreen = props => {
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler })
   }, [onSubmitHandler])
+
+  const titleChangeHandler = text => {
+    if (text.trim().length === 0 ) {
+      setTitleIsValid(false)
+    } else {
+      setTitleIsValid(true)
+    }
+    setTitle(text);
+  }
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -82,18 +98,30 @@ const EditProductScreen = props => {
         : null}
 
       <View style={styles.inputContainer}>
-        <Text>title</Text>
+        {!titleIsValid ?  <Text style={styles.validationText}>* title ?</Text> : <Text>title</Text>} 
         <TextInput
           style={styles.inputStyle}
           value={title}
-          onChangeText={text => setTitle(text)}></TextInput>
-
+          keyboardType='default'
+          onChangeText={titleChangeHandler}
+          autoCapitalize='sentences'
+          autoCorrect
+          returnKeyType='next'
+          // onFocus={() => {
+          //   if (title.length === 0 ) {
+          //     setTitleIsValid(false)
+          // } else {
+          //   setTitleIsValid(true)
+          // }
+          // }}
+          ></TextInput>
         {product ?
           null : <View>
             <Text>price</Text>
             <TextInput
               style={styles.inputStyle}
               value={price}
+              keyboardType="decimal-pad"
               onChangeText={text => setPrice(text)}></TextInput>
           </View>
         }
@@ -102,12 +130,16 @@ const EditProductScreen = props => {
         <TextInput
           style={styles.inputStyle}
           value={description}
+          keyboardType='default'
+          autoCapitalize='sentences'
+          autoCorrect
           onChangeText={text => setDescription(text)}
         ></TextInput>
         <Text>imageUrl</Text>
         <TextInput
           style={styles.inputStyle}
           value={imageUrl}
+          {...Platform.OS === 'android' ? keyboardType='default' : keyboardType='url'}
           onChangeText={text => setImageUrl(text)}
         ></TextInput>
       </View>
@@ -179,7 +211,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     margin: 20
   },
-
+  validationText: {
+    color: 'red',
+    marginBottom: 5,
+    opacity: 0.6,
+  }
 })
 
 export default EditProductScreen;
