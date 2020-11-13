@@ -12,19 +12,24 @@ import * as productAction from '../../store/actions/product'
 const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE"
 
 const formReducer = (state, action) => {
+
   if(action.type === FORM_REDUCER_UPDATE) {
+
     const updatedState = {
       ...state.inputValues,
       [action.input] : action.value
     };
+
     const updateValidities = {
       ...state.inputValidities,
       [action.input] : action.isValid
     };
+
     let updatedFormIsValid = true;
     for (const key in updateValidities){
       updatedFormIsValid = updatedFormIsValid && updateValidities[key]
     }
+
     return {
       formIsValid: updatedFormIsValid,
       inputValues: updatedState,
@@ -60,12 +65,14 @@ const EditProductScreen = props => {
 
 
   const onSubmitHandler = useCallback(() => {
+
     if (!formState.inputValues) {
       Alert.alert('Wrong input', "Please check errors in the form", [{
         text: 'OK'
       }])
       return;
     }
+
     if (product) {
       dispatch(
         productAction.updateProduct(
@@ -96,9 +103,8 @@ const EditProductScreen = props => {
 
     if (text.trim().length > 0 ) {
       isValid = true
-    } else {
+    } 
 
-    }
     dispatchFormState({
       type: FORM_REDUCER_UPDATE, 
       value: text, 
@@ -109,6 +115,10 @@ const EditProductScreen = props => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
+        {/* <WebView
+        source={{html: '<iframe style="border: 0; width: 100%; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=1923419739/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://alainjohannes.bandcamp.com/album/hum">Hum by Alain Johannes</a></iframe>'}}
+        style={{marginTop: 20}}
+        /> */}
       {product ? <Text style={{ padding: 10, color: 'white', backgroundColor: "#333333" }}>product ID {product ? product.id : null}</Text> : null}
 
       {product ?
@@ -162,7 +172,7 @@ const EditProductScreen = props => {
           ></TextInput>
         {product ?
           null : <View>
-            <Text>price</Text>
+        {!formState.inputValues.price ?  <Text style={styles.validationText}>* price ?</Text> : <Text>price</Text>} 
             <TextInput
               style={styles.inputStyle}
               value={formState.inputValues.price}
@@ -170,7 +180,7 @@ const EditProductScreen = props => {
               onChangeText={textChangeHandler.bind(this, 'price')}></TextInput>
           </View>
         }
-        <Text>description</Text>
+        {!formState.inputValues.description ?  <Text style={styles.validationText}>* description ?</Text> : <Text>description</Text>} 
         <TextInput
           style={styles.inputStyle}
           value={formState.inputValues.description}
@@ -179,18 +189,14 @@ const EditProductScreen = props => {
           autoCorrect
           onChangeText={textChangeHandler.bind(this, 'description')}
         ></TextInput>
-        <Text>imageUrl</Text>
+        {!formState.inputValues.imageUrl ?  <Text style={styles.validationText}>* imageUrl ?</Text> : <Text>imageUrl</Text>} 
         <TextInput
           style={styles.inputStyle}
           value={formState.inputValues.imageUrl}
           {...Platform.OS === 'android' ? keyboardType='default' : keyboardType='url'}
-          onChangeText={textChangeHandler.bind(this, 'title')}
+          onChangeText={textChangeHandler.bind(this, 'imageUrl')}
         ></TextInput>
       </View>
-        {/* <WebView
-        source={{html: '<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1923419739/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://alainjohannes.bandcamp.com/album/hum">Hum by Alain Johannes</a></iframe>'}}
-        style={{marginTop: 20}}
-        /> */}
     </ScrollView>
   )
 }
