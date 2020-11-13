@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, Platform, Alert } from 'react-native';
+// import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
@@ -7,6 +8,31 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 import * as productAction from '../../store/actions/product'
+
+const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE"
+
+const formReducer = (state, action) => {
+  if(action.type === FORM_REDUCER_UPDATE) {
+    const updatedState = {
+      ...state.inputValues,
+      [action.input] : action.value
+    };
+    const updateValidities = {
+      ...state.inputValidities,
+      [action.input] : action.isValid
+    };
+    let updatedFormIsValid = true;
+    for (const key in updateValidities){
+      updatedFormIsValid = updatedFormIsValid && updateValidities[key]
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValues: updatedState,
+      inputValidities: updateValidities
+    }
+  }
+  return state;
+}
 
 const EditProductScreen = props => {
 
@@ -16,14 +42,25 @@ const EditProductScreen = props => {
 
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(product ? product.title : '')
-  const [description, setDescription] = useState(product ? product.description : '')
-  const [imageUrl, setImageUrl] = useState(product ? product.imageUrl : '')
-  const [price, setPrice] = useState('')
-  const [titleIsValid, setTitleIsValid] = useState(true)
+  const [ formState, dispatchFormState ] = useReducer(formReducer, {
+    inputValues: {
+      title: product ? product.title : '',
+      imageUrl: product ? product.imageUrl : '',
+      description: product ? product.description : '',
+      price: ''
+    }, 
+    inputValidities: {
+      title: product ? true : false,
+      imageUrl: product ? true : false,
+      description: product ? true : false,
+      price: product ? true : false,
+    }, 
+    formIsValid: product ? true : false
+  })
+
 
   const onSubmitHandler = useCallback(() => {
-    if (!titleIsValid) {
+    if (!formState.inputValues) {
       Alert.alert('Wrong input', "Please check errors in the form", [{
         text: 'OK'
       }])
@@ -31,28 +68,43 @@ const EditProductScreen = props => {
     }
     if (product) {
       dispatch(
-        productAction.updateProduct(proId, title, description, imageUrl)
+        productAction.updateProduct(
+          proId, 
+          formState.inputValues.title, 
+          formState.inputValues.description, 
+          formState.inputValues.imageUrl)
       )
     } else {
       dispatch(
-        productAction.createProduct(title, description, imageUrl, +price)
+        productAction.createProduct(
+          formState.inputValues.title, 
+          formState.inputValues.description, 
+          formState.inputValues.imageUrl, 
+          +formState.inputValues.price)
       );
     }
     props.navigation.goBack()
-  }, [dispatch, proId, title, description, imageUrl, price])
+  }, [dispatch, proId,formState])
 
 
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler })
   }, [onSubmitHandler])
 
-  const titleChangeHandler = text => {
-    if (text.trim().length === 0 ) {
-      setTitleIsValid(false)
+  const textChangeHandler = (inputIdentifier, text) => {
+    let isValid = false
+
+    if (text.trim().length > 0 ) {
+      isValid = true
     } else {
-      setTitleIsValid(true)
+
     }
-    setTitle(text);
+    dispatchFormState({
+      type: FORM_REDUCER_UPDATE, 
+      value: text, 
+      isValid: isValid,
+      input: inputIdentifier
+    })
   }
 
   return (
@@ -63,9 +115,9 @@ const EditProductScreen = props => {
         <View style={styles.previewTopBox}>
           <View style={styles.previewContainer}>
             <ProductItem
-              image={product.imageUrl}
-              title={product.title}
-              price={product.price} >
+              image={formState.inputValues.imageUrl}
+              title={formState.inputValues.title}
+              price={formState.inputValues.price} >
               <Ionicons
                 name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
                 size={23}
@@ -98,51 +150,47 @@ const EditProductScreen = props => {
         : null}
 
       <View style={styles.inputContainer}>
-        {!titleIsValid ?  <Text style={styles.validationText}>* title ?</Text> : <Text>title</Text>} 
+        {!formState.inputValues.title ?  <Text style={styles.validationText}>* title ?</Text> : <Text>title</Text>} 
         <TextInput
           style={styles.inputStyle}
-          value={title}
+          value={formState.inputValues.title}
           keyboardType='default'
-          onChangeText={titleChangeHandler}
+          onChangeText={text => textChangeHandler('title', text)}
           autoCapitalize='sentences'
           autoCorrect
           returnKeyType='next'
-          // onFocus={() => {
-          //   if (title.length === 0 ) {
-          //     setTitleIsValid(false)
-          // } else {
-          //   setTitleIsValid(true)
-          // }
-          // }}
           ></TextInput>
         {product ?
           null : <View>
             <Text>price</Text>
             <TextInput
               style={styles.inputStyle}
-              value={price}
+              value={formState.inputValues.price}
               keyboardType="decimal-pad"
-              onChangeText={text => setPrice(text)}></TextInput>
+              onChangeText={textChangeHandler.bind(this, 'price')}></TextInput>
           </View>
         }
-
         <Text>description</Text>
         <TextInput
           style={styles.inputStyle}
-          value={description}
+          value={formState.inputValues.description}
           keyboardType='default'
           autoCapitalize='sentences'
           autoCorrect
-          onChangeText={text => setDescription(text)}
+          onChangeText={textChangeHandler.bind(this, 'description')}
         ></TextInput>
         <Text>imageUrl</Text>
         <TextInput
           style={styles.inputStyle}
-          value={imageUrl}
+          value={formState.inputValues.imageUrl}
           {...Platform.OS === 'android' ? keyboardType='default' : keyboardType='url'}
-          onChangeText={text => setImageUrl(text)}
+          onChangeText={textChangeHandler.bind(this, 'title')}
         ></TextInput>
       </View>
+        {/* <WebView
+        source={{html: '<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1923419739/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://alainjohannes.bandcamp.com/album/hum">Hum by Alain Johannes</a></iframe>'}}
+        style={{marginTop: 20}}
+        /> */}
     </ScrollView>
   )
 }
