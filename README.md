@@ -1,8 +1,8 @@
-# Market Place Template
+# Market Place Template for IOS / Android
 
-## made w/ react native expo
+## made react native expo
 
-Shop for rare records and get notifications to your cart. IOS and android compatible.
+Shopping platform, with cart notifications, receipts and user create, edit and delete of their items in the store.
 
 <br>
 <h2>ADMIN VIEW</h2>
