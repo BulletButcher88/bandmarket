@@ -160,7 +160,12 @@ const EditProductScreen = props => {
         : null}
 
       <View style={styles.inputContainer}>
-        {!formState.inputValues.title ?  <Text style={styles.validationText}>* title ?</Text> : <Text>title</Text>} 
+        <View style={{flexDirection:'row'}}>      
+          <Text style={styles.titleText}>Title</Text>
+            {!formState.inputValues.title ?
+              <Text style={styles.validationText}>* required</Text>
+              : null} 
+        </View>
         <TextInput
           style={styles.inputStyle}
           value={formState.inputValues.title}
@@ -172,7 +177,12 @@ const EditProductScreen = props => {
           ></TextInput>
         {product ?
           null : <View>
-        {!formState.inputValues.price ?  <Text style={styles.validationText}>* price ?</Text> : <Text>price</Text>} 
+          <View style={{flexDirection:'row'}}>      
+            <Text style={styles.titleText}>Price</Text>
+              {!formState.inputValues.price ?
+                <Text style={styles.validationText}>* required</Text>
+                : null} 
+            </View>
             <TextInput
               style={styles.inputStyle}
               value={formState.inputValues.price}
@@ -180,7 +190,12 @@ const EditProductScreen = props => {
               onChangeText={textChangeHandler.bind(this, 'price')}></TextInput>
           </View>
         }
-        {!formState.inputValues.description ?  <Text style={styles.validationText}>* description ?</Text> : <Text>description</Text>} 
+          <View style={{flexDirection:'row'}}>      
+            <Text style={styles.titleText}>Description</Text>
+              {!formState.inputValues.description ?
+                <Text style={styles.validationText}>* required</Text>
+                : null} 
+          </View>
         <TextInput
           style={styles.inputStyle}
           value={formState.inputValues.description}
@@ -189,7 +204,12 @@ const EditProductScreen = props => {
           autoCorrect
           onChangeText={textChangeHandler.bind(this, 'description')}
         ></TextInput>
-        {!formState.inputValues.imageUrl ?  <Text style={styles.validationText}>* imageUrl ?</Text> : <Text>imageUrl</Text>} 
+        <View style={{flexDirection:'row'}}>      
+          <Text style={styles.titleText}>Image URL</Text>
+            {!formState.inputValues.imageUrl ?
+              <Text style={styles.validationText}>* required</Text>
+              : null} 
+         </View>
         <TextInput
           style={styles.inputStyle}
           value={formState.inputValues.imageUrl}
@@ -265,10 +285,16 @@ const styles = StyleSheet.create({
   inputContainer: {
     margin: 20
   },
+  titleText: {
+    flex: 2,
+    textAlign: 'left'
+  },
   validationText: {
+    flex: 2,
     color: 'red',
     marginBottom: 5,
     opacity: 0.6,
+    textAlign: 'right'
   }
 })
 
