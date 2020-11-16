@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, TextInput, ScrollView, Platform, Alert } from '
 // import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import ProductItem from '../../components/shop/ProductItem'
-import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
+import ProductItem from '../../components/shop/ProductItem';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
+import Input from '../../components/UI/Input';
+import * as productAction from '../../store/actions/product';
 
-import * as productAction from '../../store/actions/product'
-
-const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE"
+const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE";
 
 const formReducer = (state, action) => {
 
@@ -166,15 +166,15 @@ const EditProductScreen = props => {
               <Text style={styles.validationText}>* required</Text>
               : null} 
         </View>
-        <TextInput
-          style={styles.inputStyle}
+        <Input
+          label='Title'
           value={formState.inputValues.title}
           keyboardType='default'
           onChangeText={text => textChangeHandler('title', text)}
           autoCapitalize='sentences'
           autoCorrect
           returnKeyType='next'
-          ></TextInput>
+          ></Input>
         {product ?
           null : <View>
           <View style={{flexDirection:'row'}}>      
@@ -203,6 +203,7 @@ const EditProductScreen = props => {
           autoCapitalize='sentences'
           autoCorrect
           onChangeText={textChangeHandler.bind(this, 'description')}
+          numberOfLines={3}
         ></TextInput>
         <View style={{flexDirection:'row'}}>      
           <Text style={styles.titleText}>Image URL</Text>
