@@ -13,20 +13,20 @@ const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE";
 
 const formReducer = (state, action) => {
 
-  if(action.type === FORM_REDUCER_UPDATE) {
+  if (action.type === FORM_REDUCER_UPDATE) {
 
     const updatedState = {
       ...state.inputValues,
-      [action.input] : action.value
+      [action.input]: action.value
     };
 
     const updateValidities = {
       ...state.inputValidities,
-      [action.input] : action.isValid
+      [action.input]: action.isValid
     };
 
     let updatedFormIsValid = true;
-    for (const key in updateValidities){
+    for (const key in updateValidities) {
       updatedFormIsValid = updatedFormIsValid && updateValidities[key]
     }
 
@@ -47,19 +47,19 @@ const EditProductScreen = props => {
 
   const dispatch = useDispatch();
 
-  const [ formState, dispatchFormState ] = useReducer(formReducer, {
+  const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: product ? product.title : '',
       imageUrl: product ? product.imageUrl : '',
       description: product ? product.description : '',
       price: ''
-    }, 
+    },
     inputValidities: {
       title: product ? true : false,
       imageUrl: product ? true : false,
       description: product ? true : false,
       price: product ? true : false,
-    }, 
+    },
     formIsValid: product ? true : false
   })
 
@@ -76,46 +76,40 @@ const EditProductScreen = props => {
     if (product) {
       dispatch(
         productAction.updateProduct(
-          proId, 
-          formState.inputValues.title, 
-          formState.inputValues.description, 
+          proId,
+          formState.inputValues.title,
+          formState.inputValues.description,
           formState.inputValues.imageUrl)
       )
     } else {
       dispatch(
         productAction.createProduct(
-          formState.inputValues.title, 
-          formState.inputValues.description, 
-          formState.inputValues.imageUrl, 
+          formState.inputValues.title,
+          formState.inputValues.description,
+          formState.inputValues.imageUrl,
           +formState.inputValues.price)
       );
     }
     props.navigation.goBack()
-  }, [dispatch, proId,formState])
+  }, [dispatch, proId, formState])
 
 
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler })
   }, [onSubmitHandler])
 
-  const textChangeHandler = (inputIdentifier, text) => {
-    let isValid = false
-
-    if (text.trim().length > 0 ) {
-      isValid = true
-    } 
-
+  const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
     dispatchFormState({
-      type: FORM_REDUCER_UPDATE, 
-      value: text, 
-      isValid: isValid,
+      type: FORM_REDUCER_UPDATE,
+      value: inputValue,
+      isValid: inputValidity,
       input: inputIdentifier
     })
-  }
+  }, [dispatchFormState])
 
   return (
     <ScrollView style={{ flex: 1 }}>
-        {/* <WebView
+      {/* <WebView
         source={{html: '<iframe style="border: 0; width: 100%; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=1923419739/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://alainjohannes.bandcamp.com/album/hum">Hum by Alain Johannes</a></iframe>'}}
         style={{marginTop: 20}}
         /> */}
@@ -160,63 +154,53 @@ const EditProductScreen = props => {
         : null}
 
       <View style={styles.inputContainer}>
-        <View style={{flexDirection:'row'}}>      
-          <Text style={styles.titleText}>Title</Text>
-            {!formState.inputValues.title ?
-              <Text style={styles.validationText}>* required</Text>
-              : null} 
-        </View>
         <Input
           label='Title'
-          value={formState.inputValues.title}
           keyboardType='default'
-          onChangeText={text => textChangeHandler('title', text)}
           autoCapitalize='sentences'
           autoCorrect
-          returnKeyType='next'
-          ></Input>
+          errorText='* title required'
+          onInputChange={inputChangeHandler.bind(this, 'title')}
+          initialValue={formState.inputValues ? formState.inputValues.title : ''}
+          initiallyValid={!!product}
+        ></Input>
+
+
         {product ?
           null : <View>
-          <View style={{flexDirection:'row'}}>      
-            <Text style={styles.titleText}>Price</Text>
-              {!formState.inputValues.price ?
-                <Text style={styles.validationText}>* required</Text>
-                : null} 
-            </View>
-            <TextInput
-              style={styles.inputStyle}
-              value={formState.inputValues.price}
+            <Input
+              label='Price'
               keyboardType="decimal-pad"
-              onChangeText={textChangeHandler.bind(this, 'price')}></TextInput>
+              autoCapitalize='sentences'
+              autoCorrect
+              errorText='* price required'
+            ></Input>
           </View>
         }
-          <View style={{flexDirection:'row'}}>      
-            <Text style={styles.titleText}>Description</Text>
-              {!formState.inputValues.description ?
-                <Text style={styles.validationText}>* required</Text>
-                : null} 
-          </View>
-        <TextInput
-          style={styles.inputStyle}
-          value={formState.inputValues.description}
-          keyboardType='default'
+        <Input
+          label='Description'
+          keyboardType="default"
           autoCapitalize='sentences'
           autoCorrect
-          onChangeText={textChangeHandler.bind(this, 'description')}
+          errorText='* a description is required'
           numberOfLines={3}
-        ></TextInput>
-        <View style={{flexDirection:'row'}}>      
-          <Text style={styles.titleText}>Image URL</Text>
-            {!formState.inputValues.imageUrl ?
-              <Text style={styles.validationText}>* required</Text>
-              : null} 
-         </View>
-        <TextInput
-          style={styles.inputStyle}
-          value={formState.inputValues.imageUrl}
-          {...Platform.OS === 'android' ? keyboardType='default' : keyboardType='url'}
-          onChangeText={textChangeHandler.bind(this, 'imageUrl')}
-        ></TextInput>
+          onInputChange={inputChangeHandler.bind(this, 'description')}
+          initialValue={product ? product.description : ''}
+          initiallyValid={!!product}
+        ></Input>
+        <Input
+          label='Image URL'
+          keyboardType="default"
+          autoCapitalize='sentences'
+          errorText='* image URL required'
+          autoCorrect
+          {...Platform.OS === 'android' ? keyboardType = 'default' : keyboardType = 'url'}
+          numberOfLines={3}
+          returnKeyType='next'
+          onInputChange={inputChangeHandler.bind(this, 'imageUrl')}
+          initialValue={product ? product.imageUrl : ''}
+          initiallyValid={!!product}
+        ></Input>
       </View>
     </ScrollView>
   )
@@ -285,17 +269,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     margin: 20
-  },
-  titleText: {
-    flex: 2,
-    textAlign: 'left'
-  },
-  validationText: {
-    flex: 2,
-    color: 'red',
-    marginBottom: 5,
-    opacity: 0.6,
-    textAlign: 'right'
   }
 })
 
