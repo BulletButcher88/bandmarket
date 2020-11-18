@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert } from 'react-native';
 // import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,35 +12,29 @@ import * as productAction from '../../store/actions/product';
 const FORM_REDUCER_UPDATE = "FORM_REDUCER_UPDATE";
 
 const formReducer = (state, action) => {
-
   if (action.type === FORM_REDUCER_UPDATE) {
-
     const updatedState = {
       ...state.inputValues,
       [action.input]: action.value
     };
-
     const updateValidities = {
       ...state.inputValidities,
       [action.input]: action.isValid
     };
-
     let updatedFormIsValid = true;
     for (const key in updateValidities) {
       updatedFormIsValid = updatedFormIsValid && updateValidities[key]
     }
-
     return {
       formIsValid: updatedFormIsValid,
       inputValues: updatedState,
       inputValidities: updateValidities
-    }
+    };
   }
   return state;
 }
 
 const EditProductScreen = props => {
-
   const proId = props.navigation.getParam('productId')
   const product = useSelector(state =>
     state.products.availableProducts.find(product => product.id === proId))
@@ -67,153 +61,157 @@ const EditProductScreen = props => {
   const onSubmitHandler = useCallback(() => {
 
     if (!formState.formIsValid) {
-      Alert.alert('Wrong input', "Please check errors in the form", [{
-        text: 'OK'
-      }])
+      Alert.alert('Wrong input', "Please check errors in the form", [
+        {
+          text: 'OK'
+        }
+      ]);
       return;
     }
-
     if (product) {
       dispatch(
         productAction.updateProduct(
           proId,
           formState.inputValues.title,
           formState.inputValues.description,
-          formState.inputValues.imageUrl)
-      )
+          formState.inputValues.imageUrl
+        )
+      );
     } else {
       dispatch(
         productAction.createProduct(
           formState.inputValues.title,
           formState.inputValues.description,
           formState.inputValues.imageUrl,
-          +formState.inputValues.price)
+          +formState.inputValues.price
+        )
       );
-    }
+    };
     props.navigation.goBack()
-  }, [dispatch, proId, formState])
+  }, [dispatch, proId, formState]);
 
 
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler })
   }, [onSubmitHandler])
 
-  const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
-    dispatchFormState({
-      type: FORM_REDUCER_UPDATE,
-      value: inputValue,
-      isValid: inputValidity,
-      input: inputIdentifier
-    })
-  }, [dispatchFormState])
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_REDUCER_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      {/* <WebView
-        source={{html: '<iframe style="border: 0; width: 100%; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=1923419739/size=small/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://alainjohannes.bandcamp.com/album/hum">Hum by Alain Johannes</a></iframe>'}}
-        style={{marginTop: 20}}
-        /> */}
-      {product ? <Text style={{ padding: 10, color: 'white', backgroundColor: "#333333" }}>product ID {product ? product.id : null}</Text> : null}
-
-      {product ?
-        <View style={styles.previewTopBox}>
-          <View style={styles.previewContainer}>
-            <ProductItem
-              image={formState.inputValues.imageUrl}
-              title={formState.inputValues.title}
-              price={formState.inputValues.price} >
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-                size={23}
-                color="grey"
-              />
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                size={23}
-                color="grey"
-              />
-            </ProductItem>
-          </View>
-          <View style={styles.emptySpaceBox}>
-            <Text style={styles.previewText}>OTHER PRODUCT</Text>
-            <View style={styles.emptySpaceIcons}>
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-                size={23}
-                color="grey"
-                style={{ paddingBottom: 3 }}
-              />
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                size={23}
-                color="grey"
-              />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView>
+        {product ? <Text style={{ padding: 10, color: 'white', backgroundColor: "#333333" }}>product ID {product ? product.id : null}</Text> : null}
+        {product ?
+          <View style={styles.previewTopBox}>
+            <View style={styles.previewContainer}>
+              <ProductItem
+                image={formState.inputValues.imageUrl}
+                title={formState.inputValues.title}
+                price={formState.inputValues.price} >
+                <Ionicons
+                  name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
+                  size={23}
+                  color="grey"
+                />
+                <Ionicons
+                  name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                  size={23}
+                  color="grey"
+                />
+              </ProductItem>
+            </View>
+            <View style={styles.emptySpaceBox}>
+              <Text style={styles.previewText}>OTHER PRODUCT</Text>
+              <View style={styles.emptySpaceIcons}>
+                <Ionicons
+                  name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
+                  size={23}
+                  color="grey"
+                  style={{ paddingBottom: 3 }}
+                />
+                <Ionicons
+                  name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                  size={23}
+                  color="grey"
+                />
+              </View>
             </View>
           </View>
+          : null}
+
+        <View style={styles.inputContainer}>
+          <Input
+            id='title'
+            label='Title'
+            errorText='* title required'
+            keyboardType='default'
+            autoCapitalize='sentences'
+            autoCorrect
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            initialValue={product ? product.title : ''}
+            initiallyValid={!!product}
+            required
+          ></Input>
+
+          {product ?
+            null : <View>
+              <Input
+                id='price'
+                label='Price'
+                keyboardType="decimal-pad"
+                autoCapitalize='sentences'
+                returnKeyType='next'
+                onInputChange={inputChangeHandler}
+                errorText='* price required'
+                required
+                min={0.1}
+              ></Input>
+            </View>
+          }
+          <Input
+            id='description'
+            label='Description'
+            keyboardType="default"
+            autoCapitalize='sentences'
+            autoCorrect
+            errorText=' description length'
+            numberOfLines={3}
+            onInputChange={inputChangeHandler}
+            initialValue={product ? product.description : ''}
+            initiallyValid={!!product}
+            required
+            minLength={5}
+          ></Input>
+          <Input
+            id='imageUrl'
+            label='Image URL'
+            errorText='* image URL required'
+            keyboardType="default"
+            // {...Platform.OS === 'android' ? keyboardType = 'default' : keyboardType = 'url'}
+            returnKeyType='next'
+            onInputChange={inputChangeHandler}
+            initialValue={product ? product.imageUrl : ''}
+            initiallyValid={!!product}
+            required
+          ></Input>
         </View>
-        : null}
-
-      <View style={styles.inputContainer}>
-        <Input
-          id='title'
-          label='Title'
-          keyboardType='default'
-          autoCapitalize='sentences'
-          autoCorrect
-          errorText='* title required'
-          onInputChange={inputChangeHandler}
-          initialValue={product ? product.title : ''}
-          initiallyValid={!!product}
-          required
-        ></Input>
-
-
-        {product ?
-          null : <View>
-            <Input
-              id='price'
-              label='Price'
-              keyboardType="decimal-pad"
-              autoCapitalize='sentences'
-              returnKeyType='next'
-              onInputChange={inputChangeHandler}
-              errorText='* price required'
-              required
-              min={0.1}
-            ></Input>
-          </View>
-        }
-        <Input
-          id='description'
-          label='Description'
-          keyboardType="default"
-          autoCapitalize='sentences'
-          autoCorrect
-          errorText=' description length'
-          numberOfLines={3}
-          onInputChange={inputChangeHandler}
-          initialValue={product ? product.description : ''}
-          initiallyValid={!!product}
-          required
-          minLength={5}
-        ></Input>
-        <Input
-          id='imageUrl'
-          label='Image URL'
-          keyboardType="default"
-          autoCapitalize='sentences'
-          errorText='* image URL required'
-          autoCorrect
-          {...Platform.OS === 'android' ? keyboardType = 'default' : keyboardType = 'url'}
-          numberOfLines={3}
-          returnKeyType='next'
-          onInputChange={inputChangeHandler}
-          initialValue={product ? product.imageUrl : ''}
-          initiallyValid={!!product}
-          required
-        ></Input>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

@@ -10,8 +10,7 @@ const inputReducer = (state, action) => {
       return {
         ...state,
         value: action.value,
-        isValid: action.isValid,
-        textLength: action.textLength
+        isValid: action.isValid
       };
     case INPUT_BLUR:
       return {
@@ -19,26 +18,24 @@ const inputReducer = (state, action) => {
         touched: true
       };
     default:
-      return state
+      return state;
   }
-}
+};
 
 const Input = props => {
-
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
-    isValid: props.initiallyValid ? props.initiallyValid : '',
-    textLength: props.initiallyValid ? props.initiallyValid.length : 0,
+    isValid: props.initiallyValid,
     touched: false
-  })
+  });
 
-  const { onInputChange, id } = props
+  const { onInputChange, id } = props;
 
   useEffect(() => {
     if (inputState.touched) {
-      onInputChange(id, inputState.value, inputState.isValid)
+      onInputChange(id, inputState.value, inputState.isValid);
     }
-  }, [inputState, onInputChange, id])
+  }, [inputState, onInputChange, id]);
 
   const textChangeHandler = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -46,9 +43,9 @@ const Input = props => {
     if (props.required && text.trim().length === 0) {
       isValid = false;
     }
-    // if (props.email && !emailRegex.test(text.toLowerCase())) {
-    //   isValid = false;
-    // }
+    if (props.email && !emailRegex.test(text.toLowerCase())) {
+      isValid = false;
+    }
     if (props.min != null && +text < props.min) {
       isValid = false;
     }
@@ -58,57 +55,54 @@ const Input = props => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
-    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid, textLength: text.length })
-  }
+    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
+  };
 
-  const focusHandler = () => {
-    dispatch({ type: INPUT_BLUR })
-  }
+  const lostFocusHandler = () => {
+    dispatch({ type: INPUT_BLUR });
+  };
 
   return (
-    <View>
-
-      <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.titleText}>{props.label}</Text>
-        {!inputState.isValid ?
-          <Text style={styles.validationText}>{props.minLength ? inputState.textLength - props.minLength + props.errorText : props.errorText}</Text>
-          : null}
-      </View>
-
+    <View style={styles.formControl}>
+      <Text style={styles.label}>{props.label}</Text>
       <TextInput
         {...props}
-        style={styles.inputStyle}
+        style={styles.input}
         value={inputState.value}
         onChangeText={textChangeHandler}
-        onBlur={focusHandler}
-      ></TextInput>
-
+        onBlur={lostFocusHandler}
+      />
+      {!inputState.isValid && inputState.touched && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{props.errorText}</Text>
+        </View>
+      )}
     </View>
-  )
+  );
 };
 
-
 const styles = StyleSheet.create({
-  inputStyle: {
-    fontSize: 18,
-    margin: 5,
-    backgroundColor: 'white',
-    padding: 10,
-    height: 60,
-    borderColor: 'grey',
+  formControl: {
+    width: '100%'
+  },
+  label: {
+    fontFamily: 'open-san-bold',
+    marginVertical: 8
+  },
+  input: {
+    paddingHorizontal: 2,
+    paddingVertical: 5,
+    borderBottomColor: '#ccc',
     borderBottomWidth: 1
   },
-  titleText: {
-    flex: 2,
-    textAlign: 'left'
+  errorContainer: {
+    marginVertical: 5
   },
-  validationText: {
-    flex: 2,
+  errorText: {
+    fontFamily: 'open-san',
     color: 'red',
-    marginBottom: 5,
-    opacity: 0.6,
-    textAlign: 'right'
+    fontSize: 13
   }
-})
+});
 
 export default Input 
