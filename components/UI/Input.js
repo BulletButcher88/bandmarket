@@ -10,7 +10,8 @@ const inputReducer = (state, action) => {
       return {
         ...state,
         value: action.value,
-        isValid: action.isValid
+        isValid: action.isValid,
+        textLength: action.textLength
       };
     case INPUT_BLUR:
       return {
@@ -27,16 +28,17 @@ const Input = props => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : '',
     isValid: props.initiallyValid ? props.initiallyValid : '',
+    textLength: props.initiallyValid ? props.initiallyValid.length : 0,
     touched: false
   })
 
-  const { onInputChange } = props
+  const { onInputChange, id } = props
 
   useEffect(() => {
     if (inputState.touched) {
-      onInputChange(inputState.value, inputState.isValid)
+      onInputChange(id, inputState.value, inputState.isValid)
     }
-  }, [inputState, onInputChange])
+  }, [inputState, onInputChange, id])
 
   const textChangeHandler = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -47,16 +49,16 @@ const Input = props => {
     // if (props.email && !emailRegex.test(text.toLowerCase())) {
     //   isValid = false;
     // }
-    // if (props.min != null && +text < props.min) {
-    //   isValid = false;
-    // }
-    // if (props.max != null && +text > props.max) {
-    //   isValid = false;
-    // }
-    // if (props.minLength != null && text.length < props.minLength) {
-    //   isValid = false;
-    // }
-    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid })
+    if (props.min != null && +text < props.min) {
+      isValid = false;
+    }
+    if (props.max != null && +text > props.max) {
+      isValid = false;
+    }
+    if (props.minLength != null && text.length < props.minLength) {
+      isValid = false;
+    }
+    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid, textLength: text.length })
   }
 
   const focusHandler = () => {
@@ -69,17 +71,18 @@ const Input = props => {
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.titleText}>{props.label}</Text>
         {!inputState.isValid ?
-          <Text style={styles.validationText}>{props.errorText}</Text>
+          <Text style={styles.validationText}>{props.minLength ? inputState.textLength - props.minLength + props.errorText : props.errorText}</Text>
           : null}
       </View>
+
       <TextInput
         {...props}
         style={styles.inputStyle}
         value={inputState.value}
-        returnKeyType='next'
-        onChangeText={text => textChangeHandler('title', text)}
+        onChangeText={textChangeHandler}
         onBlur={focusHandler}
       ></TextInput>
+
     </View>
   )
 };

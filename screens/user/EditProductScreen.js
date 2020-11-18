@@ -155,40 +155,50 @@ const EditProductScreen = props => {
 
       <View style={styles.inputContainer}>
         <Input
+          id='title'
           label='Title'
           keyboardType='default'
           autoCapitalize='sentences'
           autoCorrect
           errorText='* title required'
-          onInputChange={inputChangeHandler.bind(this, 'title')}
-          initialValue={formState.inputValues ? formState.inputValues.title : ''}
+          onInputChange={inputChangeHandler}
+          initialValue={product ? product.title : ''}
           initiallyValid={!!product}
+          required
         ></Input>
 
 
         {product ?
           null : <View>
             <Input
+              id='price'
               label='Price'
               keyboardType="decimal-pad"
               autoCapitalize='sentences'
-              autoCorrect
+              returnKeyType='next'
+              onInputChange={inputChangeHandler}
               errorText='* price required'
+              required
+              min={0.1}
             ></Input>
           </View>
         }
         <Input
+          id='description'
           label='Description'
           keyboardType="default"
           autoCapitalize='sentences'
           autoCorrect
-          errorText='* a description is required'
+          errorText=' description length'
           numberOfLines={3}
-          onInputChange={inputChangeHandler.bind(this, 'description')}
+          onInputChange={inputChangeHandler}
           initialValue={product ? product.description : ''}
           initiallyValid={!!product}
+          required
+          minLength={5}
         ></Input>
         <Input
+          id='imageUrl'
           label='Image URL'
           keyboardType="default"
           autoCapitalize='sentences'
@@ -197,9 +207,10 @@ const EditProductScreen = props => {
           {...Platform.OS === 'android' ? keyboardType = 'default' : keyboardType = 'url'}
           numberOfLines={3}
           returnKeyType='next'
-          onInputChange={inputChangeHandler.bind(this, 'imageUrl')}
+          onInputChange={inputChangeHandler}
           initialValue={product ? product.imageUrl : ''}
           initiallyValid={!!product}
+          required
         ></Input>
       </View>
     </ScrollView>
