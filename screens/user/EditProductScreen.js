@@ -25,10 +25,11 @@ const formReducer = (state, action) => {
     for (const key in updateValidities) {
       updatedFormIsValid = updatedFormIsValid && updateValidities[key]
     }
+    console.log("Reducer validity updated -", updatedFormIsValid)
     return {
-      formIsValid: updatedFormIsValid,
       inputValues: updatedState,
-      inputValidities: updateValidities
+      inputValidities: updateValidities,
+      formIsValid: updatedFormIsValid,
     };
   }
   return state;
@@ -55,11 +56,12 @@ const EditProductScreen = props => {
       price: product ? true : false,
     },
     formIsValid: product ? true : false
-  })
+  }
+  )
+  console.log("State update validity = ", formState.formIsValid)
 
 
   const onSubmitHandler = useCallback(() => {
-
     if (!formState.formIsValid) {
       Alert.alert('Wrong input', "Please check errors in the form", [
         {
@@ -202,7 +204,6 @@ const EditProductScreen = props => {
             label='Image URL'
             errorText='* image URL required'
             keyboardType="default"
-            // {...Platform.OS === 'android' ? keyboardType = 'default' : keyboardType = 'url'}
             returnKeyType='next'
             onInputChange={inputChangeHandler}
             initialValue={product ? product.imageUrl : ''}
