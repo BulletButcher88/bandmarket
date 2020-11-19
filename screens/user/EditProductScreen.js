@@ -25,7 +25,6 @@ const formReducer = (state, action) => {
     for (const key in updateValidities) {
       updatedFormIsValid = updatedFormIsValid && updateValidities[key]
     }
-    console.log("Reducer validity updated -", updatedFormIsValid)
     return {
       inputValues: updatedState,
       inputValidities: updateValidities,
@@ -58,7 +57,6 @@ const EditProductScreen = props => {
     formIsValid: product ? true : false
   }
   )
-  console.log("State update validity = ", formState.formIsValid)
 
 
   const onSubmitHandler = useCallback(() => {

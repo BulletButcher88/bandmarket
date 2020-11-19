@@ -5,6 +5,7 @@ import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 import * as cartAction from '../../store/actions/cart'
+import * as productActions from '../../store/actions/product'
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -12,6 +13,11 @@ const ProductOverviewScreen = props => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products.availableProducts)
   const numCartItems = useSelector(state => state.cart.numberOfItems)
+
+  useEffect(() => {
+    dispatch(productActions.fetchProduct())
+  }, [dispatch])
+
 
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
