@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  Button
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -11,19 +18,26 @@ import { Ionicons } from '@expo/vector-icons';
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState()
   const dispatch = useDispatch();
   const products = useSelector(state => state.products.availableProducts
   )
   const numCartItems = useSelector(state => state.cart.numberOfItems)
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      setIsLoading(true);
+  const loadProduct = useCallback(async () => {
+    setError(null)
+    setIsLoading(true);
+    try {
       await dispatch(productActions.fetchProduct());
-      setIsLoading(false);
+    } catch (err) {
+      setError(err.message)
     }
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError])
+
+  useEffect(() => {
     loadProduct()
-  }, [dispatch])
+  }, [dispatch, loadProduct])
 
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
@@ -40,10 +54,36 @@ const ProductOverviewScreen = props => {
     badgeAlert(numCartItems)
   }, [numCartItems])
 
+
+  if (error) {
+    return (
+      <View style={styles.emptyAPI}>
+        <Text style={{ color: 'white' }}>
+          An error has occurred! {error}
+        </Text>
+        <Button title='Refresh' onPress={() => {
+          console.log("WORKING?")
+          loadProduct();
+        }
+        } />
+      </View>
+    )
+  }
+
   if (isLoading) {
     return (
       <View style={styles.spinner}>
         <ActivityIndicator size='large' color='white' />
+      </View>
+    )
+  }
+
+  if (!isLoading && products.length === 0) {
+    return (
+      <View style={styles.emptyAPI}>
+        <Text style={{ color: 'white' }}>
+          No products have been added yet. You can start adding some
+        </Text>
       </View>
     )
   }
@@ -125,9 +165,18 @@ ProductOverviewScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   spinner: {
     flex: 1,
+    color: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'black'
+  },
+  emptyAPI: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    color: 'white'
   },
   price: {
     color: 'pink'
