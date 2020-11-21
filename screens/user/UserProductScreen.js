@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as productAction from '../../store/actions/product'
 
 const UserProductsScreen = props => {
+
   const userProducts = useSelector(state => state.products.userProducts)
   const dispatch = useDispatch()
 
@@ -22,6 +23,7 @@ const UserProductsScreen = props => {
       }
     ])
   }
+  console.log(userProducts)
 
   const editProductHandler = id => {
     props.navigation.navigate('EditProducts', { productId: id })
@@ -34,6 +36,7 @@ const UserProductsScreen = props => {
         numColumns={2}
         keyExtractor={item => item.id}
         renderItem={(itemData) =>
+
           <ProductItem
             image={itemData.item.imageUrl}
             title={itemData.item.title}
@@ -55,7 +58,9 @@ const UserProductsScreen = props => {
               size={23}
               color="red"
               onPress={() => { deleteHandler(itemData.item.id) }}
-            /></ProductItem>
+            />
+          </ProductItem>
+
         } />
     </View>
   )

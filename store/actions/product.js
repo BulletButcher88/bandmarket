@@ -10,17 +10,17 @@ export const fetchProduct = () => {
     //async code 
     const response = await fetch('https://bandmusic-expo-app.firebaseio.com//product.json')
     const resData = await response.json()
-
     const loadedProducts = [];
+
     for (const key in resData) {
       loadedProducts.push(new Product(
         key,
         'u1',
         resData[key].title,
-        resData[key].imageUrl),
+        resData[key].imageUrl,
         resData[key].description,
         resData[key].price
-      )
+      ))
     }
     dispatch({
       type: SET_PRODUCT, products: loadedProducts

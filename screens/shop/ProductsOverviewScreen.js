@@ -43,6 +43,7 @@ const ProductOverviewScreen = props => {
         numColumns={2}
         keyExtractor={item => item.id}
         renderItem={itemData =>
+
           <ProductItem
             title={itemData.item.title}
             price={itemData.item.price}
