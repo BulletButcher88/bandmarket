@@ -25,9 +25,6 @@ const ProductOverviewScreen = props => {
     loadProduct()
   }, [dispatch])
 
-
-  console.log(products)
-
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
       productId: id,
@@ -70,15 +67,16 @@ const ProductOverviewScreen = props => {
           >
             <Ionicons
               name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-              size={20}
+              size={18}
               color="grey"
+              style={{ marginRight: 12 }}
               onPress={() => {
                 selectItemHandler(itemData.item.id, itemData.item.title)
               }}
             />
             <Ionicons
               name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-              size={20}
+              size={18}
               color="grey"
               onPress={() => {
                 dispatch(cartAction.AddToCart(itemData.item));

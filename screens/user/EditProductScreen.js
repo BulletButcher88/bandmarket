@@ -114,7 +114,6 @@ const EditProductScreen = props => {
       keyboardVerticalOffset={100}
     >
       <ScrollView>
-        {product ? <Text style={{ padding: 10, color: 'white', backgroundColor: "#333333" }}>product ID {product ? product.id : null}</Text> : null}
         {product ?
           <View style={styles.previewTopBox}>
             <View style={styles.previewContainer}>

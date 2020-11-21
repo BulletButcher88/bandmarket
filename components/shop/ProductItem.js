@@ -29,14 +29,14 @@ const ProductItem = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 280,
+    height: 240,
     margin: 4,
     backgroundColor: 'black',
   },
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: '74%',
+    height: '73%',
 
   },
   image: {
@@ -49,28 +49,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 6,
     shadowRadius: 2,
     elevation: 8,
-    fontFamily: 'montserrat-bold',
-    fontSize: 12,
-    margin: 15,
+    fontFamily: 'montserrat',
+    fontSize: 14,
+    margin: 10,
     color: 'white',
-    width: '65%',
+    width: '70%',
 
   },
   gradient: {
     position: 'absolute',
+    backgroundColor: '#363636',
     bottom: 0,
     width: '100%',
-    height: '30%',
+    height: '28%',
   },
   buttons: {
     position: 'absolute',
-    right: 0,
-    width: '30%',
-    height: '100%',
-    flexDirection: 'column',
+    right: 15,
+    bottom: 5,
+    width: 40,
+    flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
-    padding: 10
   }
 })
 
