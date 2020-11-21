@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -10,14 +10,23 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const ProductOverviewScreen = props => {
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch();
-  const products = useSelector(state => state.products.availableProducts)
+  const products = useSelector(state => state.products.availableProducts
+  )
   const numCartItems = useSelector(state => state.cart.numberOfItems)
 
   useEffect(() => {
-    dispatch(productActions.fetchProduct())
+    const loadProduct = async () => {
+      setIsLoading(true);
+      await dispatch(productActions.fetchProduct());
+      setIsLoading(false);
+    }
+    loadProduct()
   }, [dispatch])
 
+
+  console.log(products)
 
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
@@ -34,6 +43,13 @@ const ProductOverviewScreen = props => {
     badgeAlert(numCartItems)
   }, [numCartItems])
 
+  if (isLoading) {
+    return (
+      <View style={styles.spinner}>
+        <ActivityIndicator size='large' color='white' />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -109,6 +125,12 @@ ProductOverviewScreen.navigationOptions = navData => {
 };
 
 const styles = StyleSheet.create({
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black'
+  },
   price: {
     color: 'pink'
   },
