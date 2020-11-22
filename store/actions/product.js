@@ -6,7 +6,6 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCT = 'SET_PRODUCT';
 
 export const fetchProduct = () => {
-
   return async dispatch => {
     //async code 
     try {
@@ -38,11 +37,18 @@ export const fetchProduct = () => {
 }
 
 export const deleteProduct = productId => {
-  return { type: DELETE_PRODUCT, pid: productId }
+  return async dispatch => {
+    await fetch(
+      `https://bandmusic-expo-app.firebaseio.com//product/${productId}.json`,
+      {
+        method: 'DELETE'
+      }
+    );
+    dispatch({ type: DELETE_PRODUCT, pid: productId })
+  }
 }
 
 export const createProduct = (title, description, imageUrl, price) => {
-
   return async dispatch => {
 
     const response = await fetch('https://bandmusic-expo-app.firebaseio.com//product.json', {
@@ -72,15 +78,31 @@ export const createProduct = (title, description, imageUrl, price) => {
   }
 }
 
-
 export const updateProduct = (id, title, description, imageUrl) => {
-  return {
-    type: UPDATE_PRODUCT,
-    pid: id,
-    productData: {
-      title,
-      description,
-      imageUrl,
-    }
+  return async dispatch => {
+    await fetch(
+      `https://bandmusic-expo-app.firebaseio.com//product/${id}.json`,
+      {
+        method: 'PATCH',
+        //PATCH just edits what has changed PUT overrides it.
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          imageUrl,
+        })
+      })
+
+    dispatch({
+      type: UPDATE_PRODUCT,
+      pid: id,
+      productData: {
+        title,
+        description,
+        imageUrl,
+      }
+    })
   }
 }

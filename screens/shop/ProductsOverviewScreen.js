@@ -35,6 +35,14 @@ const ProductOverviewScreen = props => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError])
 
+
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener('willFocus', loadProduct)
+    return () => {
+      willFocusSub.remove()
+    }
+  }, [loadProduct])
+
   useEffect(() => {
     loadProduct()
   }, [dispatch, loadProduct])
@@ -184,7 +192,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
   notification: {
     height: 12,

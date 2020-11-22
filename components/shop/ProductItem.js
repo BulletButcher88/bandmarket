@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
     height: 240,
     margin: 4,
     backgroundColor: 'black',
+    borderRadius: 5,
+    overflow: 'hidden'
   },
   imageContainer: {
     alignItems: 'center',
