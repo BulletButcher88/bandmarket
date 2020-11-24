@@ -17,39 +17,40 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const ProductOverviewScreen = props => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
   const dispatch = useDispatch();
-  const products = useSelector(state => state.products.availableProducts
-  )
-  const numCartItems = useSelector(state => state.cart.numberOfItems)
+  ;
+  const products = useSelector(state => state.products.availableProducts);
+  const numCartItems = useSelector(state => state.cart.numberOfItems);
 
   const loadProduct = useCallback(async () => {
-    setError(null)
+    setError(null);
     setIsRefreshing(true);
     try {
       await dispatch(productActions.fetchProduct());
     } catch (err) {
       setError(err.message)
     }
-    setIsRefreshing(false)
-  }, [dispatch, setIsRefreshing, setError])
+    setIsRefreshing(false);
+  }, [dispatch, setIsRefreshing, setError]);
 
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', loadProduct)
+    const willFocusSub = props.navigation.addListener('willFocus', loadProduct);
     return () => {
       willFocusSub.remove()
     }
-  }, [loadProduct])
+  }, [loadProduct]);
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     loadProduct().then(() => {
       setIsLoading(false);
     })
-  }, [dispatch, loadProduct, setIsLoading])
+  }, [dispatch, loadProduct, setIsLoading]);
 
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
@@ -58,6 +59,7 @@ const ProductOverviewScreen = props => {
       badge: numCartItems && numCartItems > 0 ? numCartItems : null
     })
   }
+
   const badgeAlert = (numCartItems) => {
     props.navigation.setParams({ badge: numCartItems })
   }
@@ -74,7 +76,6 @@ const ProductOverviewScreen = props => {
           An error has occurred! {error}
         </Text>
         <Button title='Refresh' onPress={() => {
-          console.log("WORKING?")
           loadProduct();
         }
         } />

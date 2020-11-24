@@ -23,7 +23,6 @@ const UserProductsScreen = props => {
       }
     ])
   }
-  console.log(userProducts)
 
   const editProductHandler = id => {
     props.navigation.navigate('EditProducts', { productId: id })
