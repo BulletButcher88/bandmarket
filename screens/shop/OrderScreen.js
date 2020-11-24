@@ -8,25 +8,29 @@ import OderItem from '../../components/shop/OrderItem'
 import * as orderActions from '../../store/actions/orders'
 
 const OrderScreen = props => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const orders = useSelector(state => state.orders.orders)
 
   const dispatch = useDispatch()
 
   const loadOrders = useCallback(async () => {
     setError(null)
-    setIsLoading(true)
+    setIsRefreshing(true)
     try {
       await dispatch(orderActions.fetchOrders())
     } catch (err) {
       setError(err.message)
     }
-    setIsLoading(false)
+    setIsRefreshing(false)
   }, [dispatch, setError, setIsLoading])
 
   useEffect(() => {
-    loadOrders()
+    setIsLoading(true)
+    loadOrders().then(() => {
+      setIsLoading(false)
+    })
   }, [dispatch])
 
 
@@ -44,6 +48,8 @@ const OrderScreen = props => {
 
   return (
     <FlatList
+      onRefresh={loadOrders}
+      refreshing={isRefreshing}
       data={orders}
       keyExtractor={item => item.id}
       renderItem={itemData =>

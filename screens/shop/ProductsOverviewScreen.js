@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState()
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const dispatch = useDispatch();
   const products = useSelector(state => state.products.availableProducts
   )
@@ -26,14 +27,14 @@ const ProductOverviewScreen = props => {
 
   const loadProduct = useCallback(async () => {
     setError(null)
-    setIsLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productActions.fetchProduct());
     } catch (err) {
       setError(err.message)
     }
-    setIsLoading(false);
-  }, [dispatch, setIsLoading, setError])
+    setIsRefreshing(false)
+  }, [dispatch, setIsRefreshing, setError])
 
 
   useEffect(() => {
@@ -44,8 +45,11 @@ const ProductOverviewScreen = props => {
   }, [loadProduct])
 
   useEffect(() => {
-    loadProduct()
-  }, [dispatch, loadProduct])
+    setIsLoading(true)
+    loadProduct().then(() => {
+      setIsLoading(false);
+    })
+  }, [dispatch, loadProduct, setIsLoading])
 
   const selectItemHandler = (id, title, numCartItems) => {
     props.navigation.navigate('ProductDetail', {
@@ -81,7 +85,7 @@ const ProductOverviewScreen = props => {
   if (isLoading) {
     return (
       <View style={styles.spinner}>
-        <ActivityIndicator size='large' color='white' />
+        <ActivityIndicator size='large' color='black' />
       </View>
     )
   }
@@ -99,6 +103,8 @@ const ProductOverviewScreen = props => {
   return (
     <View style={styles.container}>
       <FlatList
+        onRefresh={loadProduct}
+        refreshing={isRefreshing}
         style={{ marginVertical: 8 }}
         data={products}
         numColumns={2}
@@ -176,7 +182,6 @@ const styles = StyleSheet.create({
     color: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black'
   },
   emptyAPI: {
     padding: 20,
