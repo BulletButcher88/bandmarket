@@ -47,7 +47,8 @@ const UserProductsScreen = props => {
           >
             <Ionicons
               name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
-              size={23}
+              size={18}
+              style={{ marginRight: 12 }}
               color="#75cefa"
               onPress={() => {
                 editProductHandler(itemData.item.id)
@@ -55,7 +56,7 @@ const UserProductsScreen = props => {
             />
             <Ionicons
               name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-              size={23}
+              size={18}
               color="red"
               onPress={() => { deleteHandler(itemData.item.id) }}
             />

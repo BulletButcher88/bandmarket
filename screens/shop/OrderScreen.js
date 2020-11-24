@@ -1,12 +1,46 @@
-import React from 'react';
-import { FlatList, Text, View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect, useCallback } from 'react';
+import { FlatList, ActivityIndicator, View, StyleSheet, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 import OderItem from '../../components/shop/OrderItem'
 
+import * as orderActions from '../../store/actions/orders'
+
 const OrderScreen = props => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState()
   const orders = useSelector(state => state.orders.orders)
+
+  const dispatch = useDispatch()
+
+  const loadOrders = useCallback(async () => {
+    setError(null)
+    setIsLoading(true)
+    try {
+      await dispatch(orderActions.fetchOrders())
+    } catch (err) {
+      setError(err.message)
+    }
+    setIsLoading(false)
+  }, [dispatch, setError, setIsLoading])
+
+  useEffect(() => {
+    loadOrders()
+  }, [dispatch])
+
+
+  if (isLoading) {
+    return (
+      <View style={styles.spinner}>
+        <ActivityIndicator size='large' color="black" />
+      </View>
+    )
+  }
+
+  if (error) {
+    Alert.alert('Something is wrong', error, [{ type: 'OK' }])
+  }
 
   return (
     <FlatList
@@ -38,5 +72,13 @@ OrderScreen.navigationOptions = navData => {
     ),
   }
 }
+
+const styles = StyleSheet.create({
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
 
 export default OrderScreen;

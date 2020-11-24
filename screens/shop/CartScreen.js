@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Button, ScrollView } from 'react-native'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, ActivityIndicator } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import * as cartAction from '../../store/actions/cart';
 import * as ordersAction from '../../store/actions/orders';
@@ -7,6 +7,8 @@ import CartItem from '../../components/shop/CartItem';
 import Card from '../../components/UI/Card';
 
 const CartScreen = props => {
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const cartAmount = useSelector(state => state.cart.totalAmount)
   const cartItems = useSelector(state => {
@@ -24,6 +26,11 @@ const CartScreen = props => {
   })
   const dispatch = useDispatch();
 
+  const sendOrderHandler = async () => {
+    setIsLoading(true)
+    await dispatch(ordersAction.addOrder(cartItems, cartAmount))
+    setIsLoading(false)
+  }
 
   return (
     <View>
@@ -36,36 +43,40 @@ const CartScreen = props => {
             }
           </Text>
         </Card>
-        <Button
-          title='Pay Now' disabled={cartItems.length === 0}
-          onPress={() => {
-            dispatch(ordersAction.addOrder(cartItems, cartAmount))
-          }} />
+
+        {isLoading ? (
+          <ActivityIndicator size='small' color='black' />) : (<Button
+            title='Pay Now' disabled={cartItems.length === 0}
+            onPress={sendOrderHandler} />)
+        }
+
       </View>
-      {cartItems.length === 0 ? null : <View style={styles.screen}>
-        <Card style={styles.summary}>
-          <FlatList
-            data={cartItems}
-            keyExtractor={item => item.productId}
-            renderItem={itemData => {
-              return (
-                <CartItem
-                  productTitle={itemData.item.productTitle}
-                  quantity={itemData.item.quantity}
-                  sum={itemData.item.sum}
-                  style={styles.itemTitle}
-                  onRemove={() => {
-                    dispatch(cartAction.RemoveFromCart(itemData.item.productId))
-                  }}
-                  addItem={() => {
-                    dispatch(cartAction.PlusOneToCart(itemData.item))
-                  }}
-                />
-              )
-            }}
-          />
-        </Card>
-      </View>}
+      {cartItems.length === 0 ?
+        null :
+        <View style={styles.screen}>
+          <Card style={styles.summary}>
+            <FlatList
+              data={cartItems}
+              keyExtractor={item => item.productId}
+              renderItem={itemData => {
+                return (
+                  <CartItem
+                    productTitle={itemData.item.productTitle}
+                    quantity={itemData.item.quantity}
+                    sum={itemData.item.sum}
+                    style={styles.itemTitle}
+                    onRemove={() => {
+                      dispatch(cartAction.RemoveFromCart(itemData.item.productId))
+                    }}
+                    addItem={() => {
+                      dispatch(cartAction.PlusOneToCart(itemData.item))
+                    }}
+                  />
+                )
+              }}
+            />
+          </Card>
+        </View>}
     </View>
   )
 };

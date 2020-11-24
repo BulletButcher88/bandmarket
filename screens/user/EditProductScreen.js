@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert } from 'react-native';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert, ActivityIndicator } from 'react-native';
 // import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +35,10 @@ const formReducer = (state, action) => {
 }
 
 const EditProductScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
+
   const proId = props.navigation.getParam('productId')
   const product = useSelector(state =>
     state.products.availableProducts.find(product => product.id === proId))
@@ -58,8 +62,13 @@ const EditProductScreen = props => {
   }
   )
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error has occurred.", error, [{ text: "OK" }])
+    }
+  }, [error])
 
-  const onSubmitHandler = useCallback(() => {
+  const onSubmitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input', "Please check errors in the form", [
         {
@@ -68,26 +77,35 @@ const EditProductScreen = props => {
       ]);
       return;
     }
-    if (product) {
-      dispatch(
-        productAction.updateProduct(
-          proId,
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl
-        )
-      );
-    } else {
-      dispatch(
-        productAction.createProduct(
-          formState.inputValues.title,
-          formState.inputValues.description,
-          formState.inputValues.imageUrl,
-          +formState.inputValues.price
-        )
-      );
-    };
-    props.navigation.goBack()
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      if (product) {
+        await dispatch(
+          productAction.updateProduct(
+            proId,
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl
+          )
+        );
+      } else {
+        await dispatch(
+          productAction.createProduct(
+            formState.inputValues.title,
+            formState.inputValues.description,
+            formState.inputValues.imageUrl,
+            +formState.inputValues.price
+          )
+        );
+      };
+      props.navigation.goBack()
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false)
+
   }, [dispatch, proId, formState]);
 
 
@@ -107,6 +125,14 @@ const EditProductScreen = props => {
     [dispatchFormState]
   );
 
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size='large' color='black' />
+      </View>
+    )
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -123,12 +149,13 @@ const EditProductScreen = props => {
                 price={formState.inputValues.price} >
                 <Ionicons
                   name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-                  size={23}
+                  size={18}
                   color="grey"
+                  style={{ marginRight: 12 }}
                 />
                 <Ionicons
                   name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                  size={23}
+                  size={18}
                   color="grey"
                 />
               </ProductItem>
@@ -138,13 +165,13 @@ const EditProductScreen = props => {
               <View style={styles.emptySpaceIcons}>
                 <Ionicons
                   name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
-                  size={23}
+                  size={18}
                   color="grey"
                   style={{ paddingBottom: 3 }}
                 />
                 <Ionicons
                   name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                  size={23}
+                  size={18}
                   color="grey"
                 />
               </View>
@@ -276,6 +303,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     margin: 20
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })
 

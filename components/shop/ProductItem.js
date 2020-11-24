@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: '73%',
+    height: '75%',
 
   },
   image: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#363636',
     bottom: 0,
     width: '100%',
-    height: '28%',
+    height: '25%',
   },
   buttons: {
     position: 'absolute',
