@@ -1,5 +1,5 @@
-import React, { useReducer, useCallback } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Text, Button } from 'react-native';
+import React, { useState, useReducer, useCallback } from 'react';
+import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Text, Button, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import Card from '../../components/UI/Card';
 import Input from '../../components/UI/Input';
@@ -32,7 +32,8 @@ const formReducer = (state, action) => {
 }
 
 const AuthScreen = props => {
-
+  const [isSignup, setIsSignup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: '',
@@ -47,13 +48,22 @@ const AuthScreen = props => {
 
   const dispatch = useDispatch()
 
-  const signupHandle = () => {
-    dispatch(
-      authActions.signup(
+  const authHandler = async () => {
+    let action;
+    if (isSignup) {
+      action = authActions.signup(
         formState.inputValues.email,
         formState.inputValues.password
       )
-    )
+    } else {
+      action = authActions.login(
+        formState.inputValues.email,
+        formState.inputValues.password
+      )
+    }
+    setIsLoading(true)
+    await dispatch(action)
+    setIsLoading(false)
   }
 
   const inputChangeHandler = useCallback(
@@ -67,6 +77,7 @@ const AuthScreen = props => {
     },
     [dispatchFormState]
   );
+
 
   return (
     <KeyboardAvoidingView
@@ -100,14 +111,18 @@ const AuthScreen = props => {
               onInputChange={inputChangeHandler}
               initialValue=''
             />
-            <View style={styles.buttonContainer}>
-              <View style={styles.button}>
-                <Button title="LOGIN" color='grey' onPress={() => { }} />
-              </View>
-              <View style={styles.button}>
-                <Button title="SIGN UP ?" color='orange' onPress={signupHandle} />
-              </View>
-            </View>
+            {isLoading ?
+              < ActivityIndicator size='small' color="black" /> :
+              <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                  <Button title={isSignup ? "Sign-Up" : "Login"} color='grey' onPress={authHandler} />
+                </View>
+                <View style={styles.button}>
+                  <Button title={isSignup ? 'If you already have an account switch to Login' : 'Switch to Sign-up'} color='orange' onPress={() => {
+                    setIsSignup(prevState => !prevState)
+                  }} />
+                </View>
+              </View>}
           </ScrollView>
         </Card>
       </LinearGradient>
@@ -131,19 +146,15 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     maxHeight: 330,
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 30,
     borderRadius: 12
   },
   screen: {
     flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 28
+    width: '100%'
   },
   button: {
-    padding: 12
+    width: 200
   }
 })
 
