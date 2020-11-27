@@ -13,14 +13,22 @@ export const signup = (email, password) => {
         returnSecureToken: true
       })
     })
-
     if (!response.ok) {
-      throw new Error('Something went wrong!', response)
+      const errorDataRes = await response.json();
+      const errorId = errorDataRes.error.message;
+      let message = "Something went wrong";
+      if (errorId === 'EMAIL_EXISTS') {
+        message = 'This email already has an account with us'
+      } else if (errorId === 'OPERATION_NOT_ALLOWED') {
+        message = 'Password sign-in is disabled for this project'
+      } else if (errorId === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+        message = 'We have blocked all requests from this device due to unusual activity.'
+      }
+      throw new Error(message)
     }
 
     const resData = await response.json();
-
-    dispatch({ type: SIGN_UP })
+    dispatch({ type: SIGN_UP, token: resData.idToken, userId: resData.localId })
   }
 }
 
@@ -35,15 +43,23 @@ export const login = (email, password) => {
         returnSecureToken: true
       })
     })
-
     if (!response.ok) {
-      throw new Error('Something went wrong!', response)
+      const errorDataRes = await response.json();
+      const errorId = errorDataRes.error.message;
+      let message = "Something went wrong";
+      if (errorId === 'EMAIL_NOT_FOUND') {
+        message = 'This email could not be found, did you sign up?'
+      } else if (errorId === 'INVALID_EMAIL') {
+        message = 'Invalid email'
+      } else if (errorId === 'INVALID_PASSWORD') {
+        message = 'Invalid password'
+      } else if (errorId === 'USER_DISABLED') {
+        message = 'This account has been disabled'
+      }
+      throw new Error(message)
     }
 
     const resData = await response.json();
-
-    console.log(resData)
-
-    dispatch({ type: LOG_IN })
+    dispatch({ type: LOG_IN, token: resData.idToken, userId: resData.localId })
   }
 }
