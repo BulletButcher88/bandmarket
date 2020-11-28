@@ -6,8 +6,10 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCT = 'SET_PRODUCT';
 
 export const fetchProduct = () => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     //async code 
+    const userId = getState().auth.userId;
+
     try {
       const response = await fetch('https://bandmusic-expo-app.firebaseio.com//product.json')
       if (!response.ok) {
@@ -20,7 +22,7 @@ export const fetchProduct = () => {
       for (const key in resData) {
         loadedProducts.push(new Product(
           key,
-          'u1',
+          resData[key].ownerId,
           resData[key].title,
           resData[key].imageUrl,
           resData[key].description,
@@ -28,7 +30,9 @@ export const fetchProduct = () => {
         ))
       }
       dispatch({
-        type: SET_PRODUCT, products: loadedProducts
+        type: SET_PRODUCT,
+        products: loadedProducts,
+        userProducts: loadedProducts.filter(prod => prod.ownerId === userId)
       })
     } catch (err) {
       throw err;
@@ -37,9 +41,11 @@ export const fetchProduct = () => {
 }
 
 export const deleteProduct = productId => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+
     const response = await fetch(
-      `https://bandmusic-expo-app.firebaseio.com//product/${productId}.json`,
+      `https://bandmusic-expo-app.firebaseio.com//product/${productId}.json?auth=${token}`,
       {
         method: 'DELETE'
       }
@@ -56,9 +62,11 @@ export const deleteProduct = productId => {
 }
 
 export const createProduct = (title, description, imageUrl, price) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const userId = getState().auth.userId;
 
-    const response = await fetch('https://bandmusic-expo-app.firebaseio.com//product.json', {
+    const response = await fetch(`https://bandmusic-expo-app.firebaseio.com//product.json?auth=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -67,7 +75,8 @@ export const createProduct = (title, description, imageUrl, price) => {
         title,
         description,
         imageUrl,
-        price
+        price,
+        ownerId: userId
       })
     })
     const resData = await response.json()
@@ -79,17 +88,19 @@ export const createProduct = (title, description, imageUrl, price) => {
         title,
         description,
         imageUrl,
-        price
+        price,
+        ownerId: userId
       }
     })
   }
 }
 
 export const updateProduct = (id, title, description, imageUrl) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
 
     const response = await fetch(
-      `https://bandmusic-expo-app.firebaseio.com//product/${id}.json`,
+      `https://bandmusic-expo-app.firebaseio.com//product/${id}.json?auth=${token}`,
       {
         method: 'PATCH',
         //PATCH just edits what has changed PUT overrides it.

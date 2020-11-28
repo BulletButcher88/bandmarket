@@ -16,16 +16,16 @@ export default (state = initialState, action) => {
     case SET_PRODUCT:
       return {
         availableProducts: action.products,
-        userProducts: action.products.filter(product => product.ownerId === 'u1')
+        userProducts: action.userProducts
       };
     case CREATE_PRODUCT:
       const newProduct = new Product(
         action.productData.id,
-        'u1',
+        action.productData.ownerId,
         action.productData.title,
         action.productData.imageUrl,
         action.productData.description,
-        action.productData.price
+        action.productData.price,
       )
       return {
         ...state,

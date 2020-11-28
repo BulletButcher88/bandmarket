@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, ActivityIndicator, View, StyleSheet, Alert } from 'react-native';
+import { FlatList, ActivityIndicator, View, StyleSheet, Alert, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
@@ -44,6 +44,12 @@ const OrderScreen = props => {
 
   if (error) {
     Alert.alert('Something is wrong', error, [{ type: 'OK' }])
+  }
+
+  if (orders.length === 0) {
+    return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+      <Text style={{ fontSize: 15 }}>No orders found.</Text>
+    </View>)
   }
 
   return (

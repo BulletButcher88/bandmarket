@@ -27,6 +27,14 @@ const UserProductsScreen = props => {
   const editProductHandler = id => {
     props.navigation.navigate('EditProducts', { productId: id })
   }
+
+  if (userProducts.length === 0) {
+    return (<View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+      <Text style={{ color: 'white', fontSize: 15 }}>No products found. You can start adding items '+'</Text>
+    </View>)
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Edit / Delete</Text>
@@ -60,7 +68,6 @@ const UserProductsScreen = props => {
               onPress={() => { deleteHandler(itemData.item.id) }}
             />
           </ProductItem>
-
         } />
     </View>
   )
