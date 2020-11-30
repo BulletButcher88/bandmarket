@@ -14,7 +14,7 @@ const ProductItem = props => {
         <Image style={styles.image} source={{ uri: props.image }} />
       </TouchableHighlight>
       <LinearGradient
-        colors={['transparent', 'black']}
+        colors={['transparent', 'white']}
         style={styles.gradient}
       >
         <View style={styles.buttons}>

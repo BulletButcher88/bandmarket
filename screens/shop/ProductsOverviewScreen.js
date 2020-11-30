@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  Button
+  Button,
+  Share
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
@@ -101,6 +102,26 @@ const ProductOverviewScreen = props => {
     )
   }
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'URL link to share',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -121,18 +142,17 @@ const ProductOverviewScreen = props => {
             }}
           >
             <Ionicons
-              name={Platform.OS === 'android' ? 'md-eye' : 'ios-eye'}
+              name={Platform.OS === 'android' ? 'md-share-social' : 'ios-paper-plane'}
               size={18}
-              color="grey"
+              color='black'
               style={{ marginRight: 12 }}
-              onPress={() => {
-                selectItemHandler(itemData.item.id, itemData.item.title)
-              }}
+              onPress={onShare}
             />
+
             <Ionicons
               name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
               size={18}
-              color="grey"
+              color="black"
               onPress={() => {
                 dispatch(cartAction.AddToCart(itemData.item));
                 badgeAlert(numCartItems + 1)

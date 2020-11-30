@@ -80,8 +80,6 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
-    console.log("login action redux = ", resData)
-
     dispatch(authenticate(
       resData.localId,
       resData.idToken,
