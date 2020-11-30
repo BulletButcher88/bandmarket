@@ -96,9 +96,9 @@ export const createProduct = (title, description, imageUrl, price) => {
 }
 
 export const updateProduct = (id, title, description, imageUrl) => {
-
   return async (dispatch, getState) => {
     const token = getState().auth.token;
+
     console.log("token for updating API ========= ", token)
 
     const response = await fetch(

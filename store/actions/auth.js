@@ -40,16 +40,14 @@ export const signup = (email, password) => {
     }
 
     const resData = await response.json();
-
     dispatch(authenticate(
       resData.localId,
-      resData.token,
+      resData.idToken,
       parseInt(resData.expiresIn) * 1000
     ));
     const expirationData = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
-
     saveDataToStorage(resData.idToken, resData.localId, expirationData)
   }
 };
@@ -82,10 +80,11 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
+    console.log("login action redux = ", resData)
 
     dispatch(authenticate(
       resData.localId,
-      resData.token,
+      resData.idToken,
       parseInt(resData.expiresIn) * 1000
     ));
     const expirationData = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
@@ -96,7 +95,9 @@ export const login = (email, password) => {
 export const logout = () => {
   clearLogoutTimer();
   AsyncStorage.removeItem('userData')
-  return { type: LOGOUT }
+  return dispatch => {
+    dispatch({ type: LOGOUT })
+  };
 };
 
 const clearLogoutTimer = () => {
