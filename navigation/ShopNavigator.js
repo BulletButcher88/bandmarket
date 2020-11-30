@@ -16,7 +16,6 @@ import UserProductsScreen from '../screens/user/UserProductScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 import AuthScreen from '../screens/user/AuthScreen';
 import StartupScreen from '../screens/StartupScreen';
-import auth from '../store/reducers/auth';
 // import Colors from ''
 
 const defaultOptions = {

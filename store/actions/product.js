@@ -96,8 +96,10 @@ export const createProduct = (title, description, imageUrl, price) => {
 }
 
 export const updateProduct = (id, title, description, imageUrl) => {
+
   return async (dispatch, getState) => {
     const token = getState().auth.token;
+    console.log(token)
 
     const response = await fetch(
       `https://bandmusic-expo-app.firebaseio.com//product/${id}.json?auth=${token}`,
@@ -115,6 +117,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
       })
 
     if (!response.ok) {
+      console.log(response)
       throw new Error('Something is wrong with the API call.')
     }
 
