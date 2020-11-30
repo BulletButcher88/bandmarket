@@ -99,7 +99,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
 
   return async (dispatch, getState) => {
     const token = getState().auth.token;
-    console.log(token)
+    console.log("token for updating API ========= ", token)
 
     const response = await fetch(
       `https://bandmusic-expo-app.firebaseio.com//product/${id}.json?auth=${token}`,

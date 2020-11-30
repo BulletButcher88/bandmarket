@@ -5,19 +5,19 @@ import { useDispatch } from 'react-redux';
 import * as authActions from '../store/actions/auth';
 
 const StartupScreen = props => {
-
   const dispatch = useDispatch();
 
-
   useEffect(() => {
+    let unmounted = false;
+
     const tryLogin = async () => {
       const getData = await AsyncStorage.getItem('userData');
-      console.log(getData)
 
       if (!getData) {
         props.navigation.navigate('Auth')
         return;
       }
+
       const conversion = JSON.parse(getData)
       const { token, userId, expiryDate } = conversion
       const expirationDate = new Date(expiryDate)
@@ -28,11 +28,13 @@ const StartupScreen = props => {
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime()
-
       props.navigation.navigate('Shop')
       dispatch(authActions.authenticate(userId, token, expirationTime))
     }
+
     tryLogin()
+    return () => { unmounted = true };
+
   }, [dispatch])
 
   return (
