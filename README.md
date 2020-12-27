@@ -12,6 +12,6 @@ Shopping platform, with cart notifications, receipts and user create, edit and d
 Upload your own records to the marketplace.
 
 <br>
-<h2>SHOPPING</h2>
+<h2>SHOPPING UI</h2>
 <img src="./assets/native-shop2.gif" width="300" height="600">
 <br>
