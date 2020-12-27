@@ -1,6 +1,6 @@
 # Market Place App IOS / Android
 
-### made with React Native Expo
+### made with React Native Expo, Redux, Firebase
 
 Shopping platform, with cart notifications, receipts and user create, edit and delete of their items in the store.
 
