@@ -1,4 +1,4 @@
-# Market Place App IOS / Android
+# Market Place App
 
 ### made with React Native Expo, Redux, Firebase
 
