@@ -68,7 +68,7 @@ const ProductDetailScreen = props => {
   )
 }
 
-ProductDetailScreen.navigationOptions = navData => {
+export const screenOptions = navData => {
   const alert = navData.navigation.getParam('badge')
   return {
     headerTitle: navData.navigation.getParam('productTitle'),

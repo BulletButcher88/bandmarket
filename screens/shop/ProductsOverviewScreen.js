@@ -164,9 +164,10 @@ const ProductOverviewScreen = props => {
   )
 }
 
-ProductOverviewScreen.navigationOptions = navData => {
-  const alertData = navData.navigation.getParam('badge')
-  const alert = alertData ? alertData : null
+export const screenOptions = navData => {
+  console.log(navData)
+  // const alertData = navData.navigation.getParam('badge')
+  // const alert = alertData ? alertData : null
   return {
     headerTitle: 'Products',
     headerLeft: (() =>
@@ -189,9 +190,11 @@ ProductOverviewScreen.navigationOptions = navData => {
           onPress={() => {
             navData.navigation.navigate('Cart')
           }} />
-        {alert ?
-          <View style={styles.notification}>
-          </View> : null}
+        {
+          // alert ?
+          // <View style={styles.notification}>
+          // </View> : null
+        }
       </HeaderButtons>
     )
   }

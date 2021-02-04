@@ -81,8 +81,10 @@ const CartScreen = props => {
   )
 };
 
-CartScreen.navigationOptions = {
-  headerTitle: 'Your Oder'
+export const screenOptions = navData => {
+  return {
+    headerTitle: 'Your Oder'
+  }
 }
 
 const styles = StyleSheet.create({
