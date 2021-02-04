@@ -81,7 +81,8 @@ const AuthScreen = props => {
     setIsLoading(true)
     try {
       await dispatch(action)
-      props.navigation.navigate('Shop')
+      // redux state re-config to change pages in AppNavigator 
+      // props.navigation.navigate('Shop')
     } catch (err) {
       setError(err.message)
       setIsLoading(false)
@@ -153,7 +154,7 @@ const AuthScreen = props => {
   )
 }
 
-AuthScreen.navigationOptions = {
+export const screenOptions = {
   headerTitle: 'Authenticate'
 }
 

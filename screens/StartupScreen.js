@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import * as authActions from '../store/actions/auth';
@@ -14,7 +14,8 @@ const StartupScreen = props => {
       const getData = await AsyncStorage.getItem('userData');
 
       if (!getData) {
-        props.navigation.navigate('Auth')
+        // props.navigation.navigate('Auth')
+        dispatch(authActions.setDidTryAL())
         return;
       }
 
@@ -23,7 +24,8 @@ const StartupScreen = props => {
       const expirationDate = new Date(expiryDate)
 
       if (expirationDate <= new Date() || !token || !userId) {
-        props.navigation.navigate('Auth')
+        // props.navigation.navigate('Auth')
+        dispatch(authActions.setDidTryAL())
         return;
       }
 
@@ -39,7 +41,10 @@ const StartupScreen = props => {
 
   return (
     <View style={styles.screen}>
-      <ActivityIndicator size='large' color='black' />
+      <Image
+        source={require('../assets/rocketman.gif')}
+        style={{ width: 200, height: 200 }}
+      />
     </View>
   )
 }
