@@ -21,6 +21,7 @@ const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [badgeAlert, setBadgeAlert] = useState(null)
 
   const dispatch = useDispatch();
   ;
@@ -61,12 +62,42 @@ const ProductOverviewScreen = props => {
     })
   }
 
-  const badgeAlert = (numCartItems) => {
-    props.navigation.setParams({ badge: numCartItems })
-  }
+  // const badgeAlert = (numCartItems) => {
+  //   props.navigation.setParams({ badge: numCartItems })
+  // }
 
   useEffect(() => {
-    badgeAlert(numCartItems)
+    setBadgeAlert(numCartItems)
+
+    props.navigation.setOptions({
+      headerLeft: (() =>
+        <HeaderButtons
+          HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title='Cart'
+            iconName='ios-menu'
+            onPress={() => {
+              props.navigation.toggleDrawer()
+            }} />
+        </HeaderButtons>
+      ),
+      headerRight: (() =>
+        <HeaderButtons
+          HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title='Cart'
+            iconName='ios-cart'
+            onPress={() => {
+              props.navigation.navigate('Cart')
+            }} />
+          {
+            badgeAlert ?
+              <View style={styles.notification}>
+              </View> : null
+          }
+        </HeaderButtons>
+      )
+    })
   }, [numCartItems])
 
 
@@ -155,7 +186,7 @@ const ProductOverviewScreen = props => {
               color="black"
               onPress={() => {
                 dispatch(cartAction.AddToCart(itemData.item));
-                badgeAlert(numCartItems + 1)
+                setBadgeAlert(numCartItems + 1)
               }}
             />
           </ProductItem>
@@ -165,38 +196,8 @@ const ProductOverviewScreen = props => {
 }
 
 export const screenOptions = navData => {
-  console.log(navData)
-  // const alertData = navData.navigation.getParam('badge')
-  // const alert = alertData ? alertData : null
   return {
-    headerTitle: 'Products',
-    headerLeft: (() =>
-      <HeaderButtons
-        HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Cart'
-          iconName='ios-menu'
-          onPress={() => {
-            navData.navigation.toggleDrawer()
-          }} />
-      </HeaderButtons>
-    ),
-    headerRight: (() =>
-      <HeaderButtons
-        HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Cart'
-          iconName='ios-cart'
-          onPress={() => {
-            navData.navigation.navigate('Cart')
-          }} />
-        {
-          // alert ?
-          // <View style={styles.notification}>
-          // </View> : null
-        }
-      </HeaderButtons>
-    )
+    headerTitle: 'Products'
   }
 };
 

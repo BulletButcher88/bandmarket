@@ -110,7 +110,20 @@ const EditProductScreen = props => {
 
 
   useEffect(() => {
-    props.navigation.setParams({ submit: onSubmitHandler })
+    props.navigation.setOptions({
+      headerRight: (() =>
+        <HeaderButtons
+          HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title='Cart'
+            iconName='ios-checkmark'
+            onPress={onSubmitHandler} />
+          {alert ?
+            <View style={styles.notification}>
+            </View> : null}
+        </HeaderButtons>
+      )
+    })
   }, [onSubmitHandler])
 
   const inputChangeHandler = useCallback(
@@ -241,22 +254,9 @@ const EditProductScreen = props => {
 }
 
 export const screenOptions = navData => {
-  const submitFm = navData.route.params ? navData.route.params.submit : null;
   const routeParams = navData.route.params ? navData.route.params : {};
   return {
-    headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
-    headerRight: (() =>
-      <HeaderButtons
-        HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Cart'
-          iconName='ios-checkmark'
-          onPress={submitFm} />
-        {alert ?
-          <View style={styles.notification}>
-          </View> : null}
-      </HeaderButtons>
-    )
+    headerTitle: routeParams.productId ? "Edit Product" : "Add Product"
   }
 }
 
