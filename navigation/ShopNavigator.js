@@ -15,7 +15,7 @@ import OrderScreen, { screenOptions as orderScreenOptions } from '../screens/sho
 import UserProductsScreen, { screenOptions as userProductScreenOptions } from '../screens/user/UserProductScreen';
 import EditProductScreen, { screenOptions as editProductScreenOptions } from '../screens/user/EditProductScreen';
 import AuthScreen, { screenOptions as authScreenOptions } from '../screens/user/AuthScreen';
-import StartupScreen from '../screens/StartupScreen';
+import StartupScreen, { screenOptions as startupScreenOptions } from '../screens/StartupScreen';
 // import Colors from ''
 
 

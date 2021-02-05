@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import * as authActions from '../store/actions/auth';
@@ -12,10 +12,10 @@ const StartupScreen = props => {
     let unmounted = false;
 
     const tryLogin = async () => {
+
       const getData = await AsyncStorage.getItem('userData');
 
       if (!getData) {
-        // props.navigation.navigate('Auth')
         dispatch(authActions.setDidTryAL())
         return;
       }
@@ -25,23 +25,24 @@ const StartupScreen = props => {
       const expirationDate = new Date(expiryDate)
 
       if (expirationDate <= new Date() || !token || !userId) {
-        // props.navigation.navigate('Auth')
         dispatch(authActions.setDidTryAL())
         return;
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime()
-      // props.navigation.navigate('Shop')
       dispatch(authActions.authenticate(userId, token, expirationTime))
     }
 
-    tryLogin()
+    setTimeout(() => tryLogin(), 1000);
+
     return () => { unmounted = true };
 
   }, [dispatch])
 
+
   return (
     <View style={{ flex: 1 }}>
+      <View style={{ width: '100%', height: 80 }} />
       <CustomActivityIndicator />
     </View>
   )

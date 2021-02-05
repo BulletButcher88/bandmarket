@@ -17,11 +17,12 @@ const CartNotificationSticker = props => {
 
 const styles = StyleSheet.create({
   notification: {
-    height: 14,
-    width: 14,
+    height: 15,
+    width: 15,
     backgroundColor: 'red',
     position: 'absolute',
-    right: 4,
+    top: -8,
+    right: 1,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

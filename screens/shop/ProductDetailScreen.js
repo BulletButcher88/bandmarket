@@ -14,9 +14,10 @@ import SlideProductItem from '../../components/shop/SlideProductItem'
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
+import CartNotificationSticker from '../../components/UI/CartNotificationSticker'
 
 const ProductDetailScreen = props => {
-  const productId = props.route.param.productId
+  const productId = props.route.params.productId
 
   const numCartItems = useSelector(state => state.cart.numberOfItems)
   const product = useSelector(state =>
@@ -37,8 +38,10 @@ const ProductDetailScreen = props => {
             }} />
           {
             numCartItems ?
-              <View style={styles.notification}>
-              </View> : null
+              <CartNotificationSticker>
+                {numCartItems}
+              </CartNotificationSticker>
+              : null
           }
         </HeaderButtons>
       )
@@ -68,7 +71,6 @@ const ProductDetailScreen = props => {
               title='Add to Cart'
               onPress={() => {
                 dispatch(cartAction.AddToCart(product));
-                badgeAlert(numCartItems);
               }} />
           </View>
         </View>
@@ -160,14 +162,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     justifyContent: 'center'
-  },
-  notification: {
-    height: 12,
-    width: 12,
-    backgroundColor: 'red',
-    position: 'absolute',
-    right: 4,
-    borderRadius: 10
   }
 })
 
