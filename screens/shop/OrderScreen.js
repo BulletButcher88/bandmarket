@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, ActivityIndicator, View, StyleSheet, Alert, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Alert, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 import OderItem from '../../components/shop/OrderItem'
 
 import * as orderActions from '../../store/actions/orders'
+import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator'
 
 const OrderScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +38,7 @@ const OrderScreen = props => {
   if (isLoading) {
     return (
       <View style={styles.spinner}>
-        <ActivityIndicator size='large' color="black" />
+        <CustomActivityIndicator />
       </View>
     )
   }
@@ -88,6 +89,9 @@ export const screenOptions = navData => {
 const styles = StyleSheet.create({
   spinner: {
     flex: 1,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },

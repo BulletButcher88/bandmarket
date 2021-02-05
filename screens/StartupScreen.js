@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Image, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import * as authActions from '../store/actions/auth';
+import CustomActivityIndicator from '../components/UI/CustomActivityIndicator'
 
 const StartupScreen = props => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const StartupScreen = props => {
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime()
-      props.navigation.navigate('Shop')
+      // props.navigation.navigate('Shop')
       dispatch(authActions.authenticate(userId, token, expirationTime))
     }
 
@@ -40,22 +41,11 @@ const StartupScreen = props => {
   }, [dispatch])
 
   return (
-    <View style={styles.screen}>
-      <Image
-        source={require('../assets/rocketman.gif')}
-        style={{ width: 200, height: 200 }}
-      />
+    <View style={{ flex: 1 }}>
+      <CustomActivityIndicator />
     </View>
   )
-}
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+};
 
 
 export default StartupScreen;

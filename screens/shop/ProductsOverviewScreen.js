@@ -3,7 +3,6 @@ import {
   FlatList,
   View,
   StyleSheet,
-  ActivityIndicator,
   Text,
   Button,
   Share
@@ -16,6 +15,7 @@ import * as cartAction from '../../store/actions/cart'
 import * as productActions from '../../store/actions/product'
 import { Ionicons } from '@expo/vector-icons';
 
+import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator'
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,9 +40,9 @@ const ProductOverviewScreen = props => {
 
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', loadProduct);
+    const unsubscribe = props.navigation.addListener('focus', loadProduct);
     return () => {
-      willFocusSub.remove()
+      unsubscribe()
     }
   }, [loadProduct]);
 
@@ -87,7 +87,7 @@ const ProductOverviewScreen = props => {
   if (isLoading) {
     return (
       <View style={styles.spinner}>
-        <ActivityIndicator size='large' color='black' />
+        <CustomActivityIndicator />
       </View>
     )
   }
@@ -203,7 +203,9 @@ export const screenOptions = navData => {
 const styles = StyleSheet.create({
   spinner: {
     flex: 1,
-    color: 'white',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },

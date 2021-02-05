@@ -1,10 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer'
-
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { DrawerNavigatorItems } from 'react-navigation-drawer';
 import { Platform, SafeAreaView, Button, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -87,18 +83,20 @@ export const ProductsNavigator = () => {
 //     defaultNavigationOptions: defaultOptions
 //   })
 
+const AdminStackNavigator = createStackNavigator();
+
 export const AdminNavigator = () => {
   return (
-    <AdminNavigator.Navigator screenOptions={defaultOptions}>
-      <AdminNavigator.Screen
+    <AdminStackNavigator.Navigator screenOptions={defaultOptions}>
+      <AdminStackNavigator.Screen
         name="UserProducts"
         component={UserProductsScreen}
         options={userProductScreenOptions} />
-      <AdminNavigator.Screen
+      <AdminStackNavigator.Screen
         name="EditProducts"
         component={EditProductScreen}
         options={editProductScreenOptions} />
-    </AdminNavigator.Navigator>
+    </AdminStackNavigator.Navigator>
   )
 };
 
@@ -165,7 +163,7 @@ export const ShopNavigator = () => {
             <DrawerItemList {...props} />
             <Button title='Logout' color='orange' fontSize={10} onPress={() => {
               dispatch(authActions.logout())
-              props.navigation.navigate('Auth')
+              // props.navigation.navigate('Auth')
             }} />
           </SafeAreaView>
         </View>

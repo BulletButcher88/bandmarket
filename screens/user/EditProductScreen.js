@@ -39,7 +39,7 @@ const EditProductScreen = props => {
   const [error, setError] = useState();
 
 
-  const proId = props.navigation.getParam('productId')
+  const proId = props.route.params ? props.route.params.productId : null
   const product = useSelector(state =>
     state.products.availableProducts.find(product => product.id === proId))
 
@@ -241,9 +241,10 @@ const EditProductScreen = props => {
 }
 
 export const screenOptions = navData => {
-  const submitFm = navData.navigation.getParam('submit')
+  const submitFm = navData.route.params ? navData.route.params.submit : null;
+  const routeParams = navData.route.params ? navData.route.params : {};
   return {
-    headerTitle: navData.navigation.getParam('productId') ? "Edit Product" : "Add Product",
+    headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
     headerRight: (() =>
       <HeaderButtons
         HeaderButtonComponent={CustomHeaderButton}>
