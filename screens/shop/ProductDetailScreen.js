@@ -16,20 +16,36 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 const ProductDetailScreen = props => {
+  const productId = props.route.param.productId
 
-  const productId = props.navigation.getParam('productId')
+  const numCartItems = useSelector(state => state.cart.numberOfItems)
   const product = useSelector(state =>
     state.products.availableProducts.find(product =>
       product.id === productId))
 
 
-  // useEffect(() => {
-  // }, [badgeAlert])
-  const numCartItems = useSelector(state => state.cart.numberOfItems)
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerRight: (() =>
+        <HeaderButtons
+          HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title='Cart'
+            iconName='ios-cart'
+            onPress={() => {
+              navData.navigation.navigate('Cart')
+            }} />
+          {
+            numCartItems ?
+              <View style={styles.notification}>
+              </View> : null
+          }
+        </HeaderButtons>
+      )
+    })
+  }, [numCartItems])
 
-  const badgeAlert = () => {
-    props.navigation.setParams({ badge: numCartItems + 1 })
-  }
+
   const dispatch = useDispatch()
 
   const { title, price, description, imageUrl, ownerId } = product
@@ -69,23 +85,8 @@ const ProductDetailScreen = props => {
 }
 
 export const screenOptions = navData => {
-  const alert = navData.navigation.getParam('badge')
   return {
-    headerTitle: navData.navigation.getParam('productTitle'),
-    headerRight: (() =>
-      <HeaderButtons
-        HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Cart'
-          iconName='ios-cart'
-          onPress={() => {
-            navData.navigation.navigate('Cart')
-          }} />
-        {alert ?
-          <View style={styles.notification}>
-          </View> : null}
-      </HeaderButtons>
-    )
+    headerTitle: navData.route.params.productTitle
   }
 }
 

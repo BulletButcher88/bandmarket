@@ -16,6 +16,7 @@ import * as productActions from '../../store/actions/product'
 import { Ionicons } from '@expo/vector-icons';
 
 import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator'
+import CartNotificationSticker from '../../components/UI/CartNotificationSticker'
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -91,9 +92,9 @@ const ProductOverviewScreen = props => {
               props.navigation.navigate('Cart')
             }} />
           {
-            badgeAlert ?
-              <View style={styles.notification}>
-              </View> : null
+            numCartItems > 0 ?
+              <CartNotificationSticker>{numCartItems}</CartNotificationSticker>
+              : null
           }
         </HeaderButtons>
       )
@@ -225,14 +226,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: 'white',
-  },
-  notification: {
-    height: 12,
-    width: 12,
-    backgroundColor: 'red',
-    position: 'absolute',
-    right: 4,
-    borderRadius: 10
   }
 })
 
