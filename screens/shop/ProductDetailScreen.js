@@ -34,7 +34,7 @@ const ProductDetailScreen = props => {
             title='Cart'
             iconName='ios-cart'
             onPress={() => {
-              navData.navigation.navigate('Cart')
+              props.navigation.navigate('Cart')
             }} />
           {
             numCartItems ?

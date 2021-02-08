@@ -8,26 +8,43 @@ import {
   Share
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import ProductItem from '../../components/shop/ProductItem'
-import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
-import * as cartAction from '../../store/actions/cart'
-import * as productActions from '../../store/actions/product'
+import ProductItem from '../../components/shop/ProductItem';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
+import * as cartAction from '../../store/actions/cart';
+import * as productActions from '../../store/actions/product';
 import { Ionicons } from '@expo/vector-icons';
+import * as Notifications from 'expo-notifications';
+import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator';
+import CartNotificationSticker from '../../components/UI/CartNotificationSticker';
 
-import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator'
-import CartNotificationSticker from '../../components/UI/CartNotificationSticker'
+import * as Permissions from 'expo-permissions';
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [badgeAlert, setBadgeAlert] = useState(null)
-
+  const [notificationPushing, setNotificationPushing] = useState(false)
   const dispatch = useDispatch();
   ;
   const products = useSelector(state => state.products.availableProducts);
   const numCartItems = useSelector(state => state.cart.numberOfItems);
+
+
+  if (badgeAlert == 1 && notificationPushing == false) {
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Shopping Cart",
+        body: 'You have an item waiting for you in the shopping cart'
+      },
+      trigger: {
+        seconds: 5
+      }
+    })
+    setNotificationPushing(true)
+  }
+
 
   const loadProduct = useCallback(async () => {
     setError(null);
@@ -98,7 +115,14 @@ const ProductOverviewScreen = props => {
           }
         </HeaderButtons>
       )
-    })
+    });
+    Permissions.getAsync(Permissions.NOTIFICATIONS)
+      .then(status => {
+        if (status !== 'granted') {
+          return Permissions.askAsync(Permissions.NOTIFICATIONS)
+        }
+      }).then(status => { if (status !== 'granted') { return; } })
+
   }, [numCartItems])
 
 
