@@ -32,16 +32,31 @@ const ProductOverviewScreen = props => {
   ;
   const products = useSelector(state => state.products.availableProducts);
   const numCartItems = useSelector(state => state.cart.numberOfItems);
+  const itemsInCart = useSelector(state => state.cart.items)
 
+
+  useEffect(() => {
+    Permissions.getAsync(Permissions.NOTIFICATIONS)
+      .then(statusObj => {
+        if (statusObj.status !== 'granted') {
+          return Permissions.askAsync(Permissions.NOTIFICATIONS)
+        }
+        return statusObj;
+      }).then(statusObj => { if (statusObj.status !== 'granted') { return; } })
+
+  }, [])
 
   useEffect(() => {
     //notifications while the app is NOT running 
     const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      const cartNotificationData = response.notification.request.content.data
+      dispatch(cartAction.NotificationsReloadData(cartNotificationData));
       props.navigation.navigate('Cart')
     })
 
     //notifications while the app is running in the background 
-    const foregroundSubscription = Notifications.addNotificationResponseReceivedListener(notification => {
+    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+      // console.log(notification)
       props.navigation.navigate('Cart')
     })
 
@@ -63,11 +78,12 @@ const ProductOverviewScreen = props => {
     Notifications.scheduleNotificationAsync({
       content: {
         title: "Shopping Cart",
-        body: 'You have an item waiting for you in the shopping cart'
+        body: 'You have an item waiting for you in the shopping cart',
+        data: { items: itemsInCart }
       },
       trigger: {
-        seconds: 5
-      }
+        seconds: 6
+      },
     })
     setNotificationPushing(true)
   }
@@ -107,9 +123,7 @@ const ProductOverviewScreen = props => {
     })
   }
 
-  // const badgeAlert = (numCartItems) => {
-  //   props.navigation.setParams({ badge: numCartItems })
-  // }
+
 
   useEffect(() => {
     setBadgeAlert(numCartItems)
@@ -143,14 +157,6 @@ const ProductOverviewScreen = props => {
         </HeaderButtons>
       )
     });
-
-    Permissions.getAsync(Permissions.NOTIFICATIONS)
-      .then(statusObj => {
-        if (statusObj.status !== 'granted') {
-          return Permissions.askAsync(Permissions.NOTIFICATIONS)
-        }
-        return statusObj;
-      }).then(statusObj => { if (statusObj.status !== 'granted') { return; } })
 
   }, [numCartItems])
 

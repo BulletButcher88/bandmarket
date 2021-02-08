@@ -1,5 +1,5 @@
 import CartItem from '../../models/cart-item';
-import { ADD_TO_CART, REMOVE_FROM_CART, PLUS_ONE_ITEM } from '../actions/cart';
+import { ADD_TO_CART, REMOVE_FROM_CART, PLUS_ONE_ITEM, NOTIFICATIONS_DATA_RELOAD } from '../actions/cart';
 import { ADD_ORDER } from '../actions/orders';
 import { DELETE_PRODUCT } from '../actions/product';
 
@@ -11,6 +11,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+
+    case NOTIFICATIONS_DATA_RELOAD:
+      const addItems = action.data.items
+      console.log(addItems)
+      return {
+        ...state,
+        items: addItems,
+      };
     case ADD_TO_CART:
       const addedProduct = action.product;
       const prodPrice = addedProduct.price;
@@ -62,7 +70,7 @@ export default (state = initialState, action) => {
         items: updatedCartItems,
         totalAmount: state.totalAmount - selectedCartItem.productPrice,
         numberOfItems: state.numberOfItems - 1
-      }
+      };
     case PLUS_ONE_ITEM:
       const cartItem = state.items[action.pid.productId];
       const plusCartItems = new CartItem(

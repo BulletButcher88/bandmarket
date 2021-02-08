@@ -7,9 +7,9 @@ import CartItem from '../../components/shop/CartItem';
 import Card from '../../components/UI/Card';
 
 const CartScreen = props => {
+  // console.log(props)
 
   const [isLoading, setIsLoading] = useState(false)
-
   const cartAmount = useSelector(state => state.cart.totalAmount)
   const cartItems = useSelector(state => {
     const transformedCartItems = [];
