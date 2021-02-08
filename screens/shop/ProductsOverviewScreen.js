@@ -20,6 +20,8 @@ import CartNotificationSticker from '../../components/UI/CartNotificationSticker
 
 import * as Permissions from 'expo-permissions';
 
+
+
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -30,6 +32,23 @@ const ProductOverviewScreen = props => {
   ;
   const products = useSelector(state => state.products.availableProducts);
   const numCartItems = useSelector(state => state.cart.numberOfItems);
+
+
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => {
+        return {
+          shouldShowAlert: true
+        }
+      }
+    })
+    const subscription = Notifications.addNotificationResponseReceivedListener(notification => {
+      console.log(notification)
+    })
+    return () => {
+      subscription.remove()
+    }
+  }, [])
 
 
   if (badgeAlert == 1 && notificationPushing == false) {
@@ -116,12 +135,14 @@ const ProductOverviewScreen = props => {
         </HeaderButtons>
       )
     });
+
     Permissions.getAsync(Permissions.NOTIFICATIONS)
-      .then(status => {
-        if (status !== 'granted') {
+      .then(statusObj => {
+        if (statusObj.status !== 'granted') {
           return Permissions.askAsync(Permissions.NOTIFICATIONS)
         }
-      }).then(status => { if (status !== 'granted') { return; } })
+        return statusObj;
+      }).then(statusObj => { if (statusObj.status !== 'granted') { return; } })
 
   }, [numCartItems])
 
