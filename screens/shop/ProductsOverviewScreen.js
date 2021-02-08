@@ -35,6 +35,16 @@ const ProductOverviewScreen = props => {
 
 
   useEffect(() => {
+    //notifications while the app is NOT running 
+    const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      props.navigation.navigate('Cart')
+    })
+
+    //notifications while the app is running in the background 
+    const foregroundSubscription = Notifications.addNotificationResponseReceivedListener(notification => {
+      props.navigation.navigate('Cart')
+    })
+
     Notifications.setNotificationHandler({
       handleNotification: async () => {
         return {
@@ -42,11 +52,9 @@ const ProductOverviewScreen = props => {
         }
       }
     })
-    const subscription = Notifications.addNotificationResponseReceivedListener(notification => {
-      console.log(notification)
-    })
     return () => {
-      subscription.remove()
+      backgroundSubscription.remove()
+      foregroundSubscription.remove()
     }
   }, [])
 
