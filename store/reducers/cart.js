@@ -13,12 +13,12 @@ export default (state = initialState, action) => {
   switch (action.type) {
 
     case NOTIFICATIONS_DATA_RELOAD:
-      const addItems = action.data.items
+      const reloadItems = action.data
 
-      console.log(addItems)
+      console.log(reloadItems, "reloadItems from reducer")
       return {
         ...state,
-        items: addItems,
+        items: reloadItems,
       };
     case ADD_TO_CART:
       const addedProduct = action.product;

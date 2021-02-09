@@ -27,6 +27,9 @@ const ProductOverviewScreen = props => {
   const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [badgeAlert, setBadgeAlert] = useState(null)
+  const [itemsInCartNotification, setItemsInCartNotification] = useState(null)
+
+
   const dispatch = useDispatch();
   ;
   const products = useSelector(state => state.products.availableProducts);
@@ -35,6 +38,7 @@ const ProductOverviewScreen = props => {
 
 
   useEffect(() => {
+
     Permissions.getAsync(Permissions.NOTIFICATIONS)
       .then(statusObj => {
         if (statusObj.status !== 'granted') {
@@ -50,6 +54,7 @@ const ProductOverviewScreen = props => {
     const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
       const cartNotificationData = response.notification.request.content.data
       dispatch(cartAction.NotificationsReloadData(cartNotificationData));
+      console.log(cartNotificationData)
       props.navigation.navigate('Cart')
     })
 
@@ -75,25 +80,31 @@ const ProductOverviewScreen = props => {
 
 
   const addToCartHandler = async (itemData) => {
+
     dispatch(cartAction.AddToCart(itemData.item));
     setBadgeAlert(numCartItems + 1);
 
-    // Notification query to refactor this later //
-    if (Constants.isDevice) {
-      const notificationCartItemWaiting = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Shopping Cart",
-          body: 'You have an item waiting for you in the shopping cart',
-          data: { items: itemsInCart }
-        },
-        trigger: {
-          seconds: 6
-        },
-      })
-    }
-    // Notification cancellation //
-    // await Notifications.cancelScheduledNotificationAsync(notificationCartItemWaiting)
+    // Notification query needs refactoring // Move to a new function
+    if (numCartItems <= 1) {
 
+      if (itemsInCartNotification) {
+        // Notification cancellation //
+        await Notifications.cancelScheduledNotificationAsync(itemsInCartNotification)
+      } else {
+        const notificationCartItemWaiting = await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Shopping Cart",
+            body: 'You have an item waiting for you in the shopping cart',
+            data: { items: itemsInCart }
+          },
+          trigger: {
+            seconds: 6
+          },
+        })
+        return notificationCartItemWaiting
+      }
+      setItemsInCartNotification(notificationCartItemWaiting)
+    }
   }
 
 
