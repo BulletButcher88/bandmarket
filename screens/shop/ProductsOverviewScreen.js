@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
 import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator';
 import CartNotificationSticker from '../../components/UI/CartNotificationSticker';
-
+import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
 
@@ -27,7 +27,6 @@ const ProductOverviewScreen = props => {
   const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [badgeAlert, setBadgeAlert] = useState(null)
-  const [notificationPushing, setNotificationPushing] = useState(false)
   const dispatch = useDispatch();
   ;
   const products = useSelector(state => state.products.availableProducts);
@@ -74,18 +73,27 @@ const ProductOverviewScreen = props => {
   }, [])
 
 
-  if (badgeAlert == 1 && notificationPushing == false) {
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Shopping Cart",
-        body: 'You have an item waiting for you in the shopping cart',
-        data: { items: itemsInCart }
-      },
-      trigger: {
-        seconds: 6
-      },
-    })
-    setNotificationPushing(true)
+
+  const addToCartHandler = async (itemData) => {
+    dispatch(cartAction.AddToCart(itemData.item));
+    setBadgeAlert(numCartItems + 1);
+
+    // Notification query to refactor this later //
+    if (Constants.isDevice) {
+      const notificationCartItemWaiting = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Shopping Cart",
+          body: 'You have an item waiting for you in the shopping cart',
+          data: { items: itemsInCart }
+        },
+        trigger: {
+          seconds: 6
+        },
+      })
+    }
+    // Notification cancellation //
+    // await Notifications.cancelScheduledNotificationAsync(notificationCartItemWaiting)
+
   }
 
 
@@ -101,12 +109,14 @@ const ProductOverviewScreen = props => {
   }, [dispatch, setIsRefreshing, setError]);
 
 
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', loadProduct);
     return () => {
       unsubscribe()
     }
   }, [loadProduct]);
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -122,7 +132,6 @@ const ProductOverviewScreen = props => {
       badge: numCartItems && numCartItems > 0 ? numCartItems : null
     })
   }
-
 
 
   useEffect(() => {
@@ -244,10 +253,7 @@ const ProductOverviewScreen = props => {
               name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
               size={18}
               color="black"
-              onPress={() => {
-                dispatch(cartAction.AddToCart(itemData.item));
-                setBadgeAlert(numCartItems + 1)
-              }}
+              onPress={() => { addToCartHandler(itemData) }}
             />
           </ProductItem>
         } />

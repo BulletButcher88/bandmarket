@@ -14,6 +14,7 @@ export default (state = initialState, action) => {
 
     case NOTIFICATIONS_DATA_RELOAD:
       const addItems = action.data.items
+
       console.log(addItems)
       return {
         ...state,
