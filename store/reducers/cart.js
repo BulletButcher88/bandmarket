@@ -13,9 +13,9 @@ export default (state = initialState, action) => {
   switch (action.type) {
 
     case NOTIFICATIONS_DATA_RELOAD:
-      const reloadItems = action.data
+      const reloadItems = action
 
-      console.log(reloadItems, "reloadItems from reducer")
+      console.log(reloadItems, "reloadItems from reducer, action")
       return {
         ...state,
         items: reloadItems,
