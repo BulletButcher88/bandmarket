@@ -29,15 +29,12 @@ const ProductOverviewScreen = props => {
   const [badgeAlert, setBadgeAlert] = useState(null)
   const [pushToken, setPushToken] = useState()
 
-  const [itemsInCartNotification, setItemsInCartNotification] = useState(null)
-
-
   const dispatch = useDispatch();
-  ;
+
   const products = useSelector(state => state.products.availableProducts);
   const numCartItems = useSelector(state => state.cart.numberOfItems);
   const itemsInCart = useSelector(state => state.cart.items)
-
+  const auth = useSelector(state => state.auth)
 
   useEffect(() => {
     Permissions.getAsync(Permissions.NOTIFICATIONS)
@@ -231,20 +228,21 @@ const ProductOverviewScreen = props => {
     )
   }
 
-  if (isLoading) {
-    return (
-      <View style={styles.spinner}>
-        <CustomActivityIndicator />
-      </View>
-    )
-  }
 
   if (!isLoading && products.length === 0) {
     return (
       <View style={styles.emptyAPI}>
         <Text style={{ color: 'white' }}>
           No products have been added yet. You can start adding some
-        </Text>
+      </Text>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.spinner}>
+        <CustomActivityIndicator />
       </View>
     )
   }
