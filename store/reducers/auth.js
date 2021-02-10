@@ -4,7 +4,6 @@ const initialState = {
   token: null,
   userId: null,
   didTryAutoLogin: false,
-  ownerPushToken: null
 }
 
 export default (state = initialState, action) => {

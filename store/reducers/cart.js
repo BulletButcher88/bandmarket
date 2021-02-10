@@ -6,7 +6,8 @@ import { DELETE_PRODUCT } from '../actions/product';
 const initialState = {
   items: {},
   totalAmount: 0,
-  numberOfItems: 0
+  numberOfItems: 0,
+  pushToken: null
 }
 
 export default (state = initialState, action) => {
@@ -24,7 +25,7 @@ export default (state = initialState, action) => {
       const addedProduct = action.product;
       const prodPrice = addedProduct.price;
       const prodTitle = addedProduct.title
-
+      const pushToken = addedProduct.pushToken;
       let updateNewCartItem;
 
       if (state.items[addedProduct.id]) {
@@ -32,6 +33,7 @@ export default (state = initialState, action) => {
           state.items[addedProduct.id].quantity + 1,
           prodPrice,
           prodTitle,
+          pushToken,
           state.items[addedProduct.id].sum + prodPrice
         );
         return {
@@ -41,7 +43,7 @@ export default (state = initialState, action) => {
           numberOfItems: state.numberOfItems + 1
         }
       } else {
-        updateNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice)
+        updateNewCartItem = new CartItem(1, prodPrice, prodTitle, pushToken, prodPrice)
         return {
           ...state,
           items: { ...state.items, [addedProduct.id]: updateNewCartItem },

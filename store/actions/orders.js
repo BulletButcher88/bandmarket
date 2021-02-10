@@ -34,6 +34,7 @@ export const addOrder = (cartItems, totalAmount) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
+
     const date = new Date()
 
     const response = await fetch(`https://bandmusic-expo-app.firebaseio.com//orders/${userId}.json?auth=${token}`, {
@@ -52,7 +53,6 @@ export const addOrder = (cartItems, totalAmount) => {
       throw new Error('Something went wrong.')
     }
 
-
     const resData = await response.json()
 
     dispatch({
@@ -63,7 +63,10 @@ export const addOrder = (cartItems, totalAmount) => {
         amount: totalAmount,
         date: date
       }
-    })
+    });
+
+
+
   }
 }
 

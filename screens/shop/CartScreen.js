@@ -7,7 +7,6 @@ import CartItem from '../../components/shop/CartItem';
 import Card from '../../components/UI/Card';
 
 const CartScreen = props => {
-  // console.log(props)
 
   const [isLoading, setIsLoading] = useState(false)
   const cartAmount = useSelector(state => state.cart.totalAmount)
@@ -19,7 +18,8 @@ const CartScreen = props => {
         productTitle: state.cart.items[key].productTitle,
         productTitle: state.cart.items[key].productTitle,
         quantity: state.cart.items[key].quantity,
-        sum: state.cart.items[key].sum
+        sum: state.cart.items[key].sum,
+        productPushToken: state.cart.items[key].pushToken
       })
     }
     return transformedCartItems.sort((a, b) => a.productId > b.productId ? 1 : -1)
