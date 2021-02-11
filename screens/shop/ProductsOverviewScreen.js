@@ -14,12 +14,12 @@ import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import * as cartAction from '../../store/actions/cart';
 import * as productActions from '../../store/actions/product';
 import { Ionicons } from '@expo/vector-icons';
-import * as Notifications from 'expo-notifications';
 import CustomActivityIndicator from '../../components/UI/CustomActivityIndicator';
 import CartNotificationSticker from '../../components/UI/CartNotificationSticker';
-import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 
+import Constants from 'expo-constants';
 
 
 const ProductOverviewScreen = props => {
@@ -36,32 +36,32 @@ const ProductOverviewScreen = props => {
   const itemsInCart = useSelector(state => state.cart.items)
   const auth = useSelector(state => state.auth)
 
-  useEffect(() => {
-    Permissions.getAsync(Permissions.NOTIFICATIONS)
-      .then(statusObj => {
-        if (statusObj.status !== 'granted') {
-          return Permissions.askAsync(Permissions.NOTIFICATIONS)
-        }
-        return statusObj;
-      }).then(statusObj => {
-        if (statusObj.status !== 'granted') {
-          throw new Error('Permission not granted')
-        }
-      })
-      .then(() => {
-        console.log("getting token")
-        return Notifications.getExpoPushTokenAsync()
-      })
-      .then(data => {
-        // token response for expo server for push notification
-        const token = data.data;
-        setPushToken(token)
-      })
-      .catch((err) => {
-        console.log(err)
-        return null;
-      })
-  }, [])
+  // useEffect(() => {
+  //   Permissions.getAsync(Permissions.NOTIFICATIONS)
+  //     .then(statusObj => {
+  //       if (statusObj.status !== 'granted') {
+  //         return Permissions.askAsync(Permissions.NOTIFICATIONS)
+  //       }
+  //       return statusObj;
+  //     }).then(statusObj => {
+  //       if (statusObj.status !== 'granted') {
+  //         throw new Error('Permission not granted')
+  //       }
+  //     })
+  //     .then(() => {
+  //       console.log("getting token")
+  //       return Notifications.getExpoPushTokenAsync()
+  //     })
+  //     .then(data => {
+  //       // token response for expo server for push notification
+  //       const token = data.data;
+  //       setPushToken(token)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //       return null;
+  //     })
+  // }, [])
 
   useEffect(() => {
     //notifications while the app is NOT running 
@@ -72,14 +72,14 @@ const ProductOverviewScreen = props => {
       dispatch(cartAction.NotificationsReloadData(cartNotificationData));
       console.log(cartNotificationData, "data received back from notification")
 
-      props.navigation.navigate('Cart')
+      props.navigation.navigate('Admin')
     })
 
     //notifications while the app is running in the background 
     const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
       console.log(notification)
 
-      props.navigation.navigate('Cart')
+      props.navigation.navigate('Admin')
     })
 
     Notifications.setNotificationHandler({
@@ -124,20 +124,20 @@ const ProductOverviewScreen = props => {
     // }
 
     //push notification 
-    fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to: pushToken,
-        data: { items: itemsInCart },
-        title: 'Notification sent via the app',
-        body: 'This push notification was sent via the app!'
-      })
-    });
+    // fetch('https://exp.host/--/api/v2/push/send', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Accept-Encoding': 'gzip, deflate',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     to: pushToken,
+    //     data: { items: itemsInCart },
+    //     title: 'Notification sent via the app',
+    //     body: 'This push notification was sent via the app!'
+    //   })
+    // });
   }
 
 
@@ -228,21 +228,20 @@ const ProductOverviewScreen = props => {
     )
   }
 
+  if (isLoading) {
+    return (
+      <View style={styles.spinner}>
+        <CustomActivityIndicator />
+      </View>
+    )
+  }
 
-  if (!isLoading && products.length === 0) {
+  if (!isLoading && !auth.didTryAutoLogin) {
     return (
       <View style={styles.emptyAPI}>
         <Text style={{ color: 'white' }}>
           No products have been added yet. You can start adding some
       </Text>
-      </View>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <View style={styles.spinner}>
-        <CustomActivityIndicator />
       </View>
     )
   }

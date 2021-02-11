@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import { StyleSheet, Text, View } from 'react-native';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -6,6 +6,8 @@ import { enableScreens } from 'react-native-screens'
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import ReduxThunk from 'redux-thunk'
+
+import * as Notifications from 'expo-notifications';
 
 import productsReducer from './store/reducers/product';
 import cartReducer from './store/reducers/cart';
@@ -19,6 +21,7 @@ import AppNavigator from './navigation/AppNavigator';
 // above debugger react native (app), place composeWithDevTools() within createStore as a second argument.
 
 enableScreens()
+
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -46,12 +49,16 @@ const fetchFonts = () => {
 }
 
 export default function App() {
+
+
+
   const [fontLoaded, setFontLoaded] = useState(false)
   if (!fontLoaded) {
     return <AppLoading startAsync={fetchFonts} onFinish={() => {
       setFontLoaded(true)
     }} />
   }
+
   return (
     <Provider store={store}>
       <AppNavigator />
