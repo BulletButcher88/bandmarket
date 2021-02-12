@@ -36,37 +36,10 @@ const ProductOverviewScreen = props => {
   const itemsInCart = useSelector(state => state.cart.items)
   const auth = useSelector(state => state.auth)
 
-  // useEffect(() => {
-  //   Permissions.getAsync(Permissions.NOTIFICATIONS)
-  //     .then(statusObj => {
-  //       if (statusObj.status !== 'granted') {
-  //         return Permissions.askAsync(Permissions.NOTIFICATIONS)
-  //       }
-  //       return statusObj;
-  //     }).then(statusObj => {
-  //       if (statusObj.status !== 'granted') {
-  //         throw new Error('Permission not granted')
-  //       }
-  //     })
-  //     .then(() => {
-  //       console.log("getting token")
-  //       return Notifications.getExpoPushTokenAsync()
-  //     })
-  //     .then(data => {
-  //       // token response for expo server for push notification
-  //       const token = data.data;
-  //       setPushToken(token)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       return null;
-  //     })
-  // }, [])
 
   useEffect(() => {
     //notifications while the app is NOT running 
     const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response)
 
       const cartNotificationData = response.notification.request.content
       dispatch(cartAction.NotificationsReloadData(cartNotificationData));
@@ -76,8 +49,8 @@ const ProductOverviewScreen = props => {
     })
 
     //notifications while the app is running in the background 
-    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification)
+    const foregroundSubscription = Notifications.addNotificationReceivedListener(response => {
+      console.log(response)
 
       props.navigation.navigate('Admin')
     })
@@ -102,42 +75,6 @@ const ProductOverviewScreen = props => {
     dispatch(cartAction.AddToCart(itemData.item));
     setBadgeAlert(numCartItems + 1);
 
-    // // Notification query needs refactoring // Move to a new function
-    // if (numCartItems <= 1) {
-    //   if (itemsInCartNotification) {
-    //     // Notification cancellation //
-    //     await Notifications.cancelScheduledNotificationAsync(itemsInCartNotification)
-    //   } else {
-    //     const notificationCartItemWaiting = await Notifications.scheduleNotificationAsync({
-    //       content: {
-    //         title: "Shopping Cart",
-    //         body: 'You have an item waiting for you in the shopping cart',
-    //         data: { items: itemsInCart }
-    //       },
-    //       trigger: {
-    //         seconds: 6
-    //       },
-    //     })
-    //     return notificationCartItemWaiting
-    //   }
-    //   setItemsInCartNotification(notificationCartItemWaiting)
-    // }
-
-    //push notification 
-    // fetch('https://exp.host/--/api/v2/push/send', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Accept-Encoding': 'gzip, deflate',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     to: pushToken,
-    //     data: { items: itemsInCart },
-    //     title: 'Notification sent via the app',
-    //     body: 'This push notification was sent via the app!'
-    //   })
-    // });
   }
 
 

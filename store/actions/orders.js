@@ -65,6 +65,23 @@ export const addOrder = (cartItems, totalAmount) => {
       }
     });
 
+    //   // Local Notification query. NEEDS refactoring, not hooked up!
+    // if (itemsInCartNotification) {
+    //   // Notification cancellation //
+    //   await Notifications.cancelScheduledNotificationAsync(itemsInCartNotification)
+    // } else {
+    //   const notificationCartItemWaiting = await Notifications.scheduleNotificationAsync({
+    //     content: {
+    //       title: "Shopping Cart",
+    //       body: 'You have an item waiting for you in the shopping cart',
+    //       data: { items: cartItems }
+    //     },
+    //     trigger: {
+    //       seconds: 6
+    //     },
+    //   })
+    //   return notificationCartItemWaiting
+    // }
 
     for (cartItems of cartItems) {
       console.log(pushToken)

@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
-// import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { enableScreens } from 'react-native-screens'
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import ReduxThunk from 'redux-thunk'
-
-import * as Notifications from 'expo-notifications';
 
 import productsReducer from './store/reducers/product';
 import cartReducer from './store/reducers/cart';
