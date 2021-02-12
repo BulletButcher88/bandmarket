@@ -1,17 +1,17 @@
 # Market Place App
 
-### made with React Native Expo, Redux, Firebase
+## Using, Expo React Native, Redux, Firebase and Expo push notifications.
 
-Shopping platform, with cart notifications, receipts and user create, edit and delete of their items in the store.
+### Features
+
+- Authentication
+- CRUD ( Create, Read, Update, Delete )
+- Form validation
+- Redux form library configuration
+- React Native Navigation
+- Shopping platform with push notifications to sellers mobile using expo token service.
 
 <br>
-<h2>ADMIN VIEW</h2>
+<h2>Preview</h2>
 <img src="./assets/native-shop1.gif" width="300" height="600">
-<br>
-
-Upload your own records to the marketplace.
-
-<br>
-<h2>SHOPPING UI</h2>
-<img src="./assets/native-shop2.gif" width="300" height="600">
 <br>
