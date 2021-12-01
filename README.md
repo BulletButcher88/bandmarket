@@ -1,6 +1,6 @@
 # Market Place App
 
-## Using, Expo React Native, Redux, Firebase and Expo push notifications.
+## Using, Expo React Native, Redux, AsyncStorage and Expo push notifications.
 
 ### Features
 
